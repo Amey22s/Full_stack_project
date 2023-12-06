@@ -2,188 +2,178 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {};
 
-export const likeReducer = createReducer(initialState, {
-  likeRequest: (state) => {
+export const likeReducer = createReducer(initialState, builder => {
+  builder.addCase("likeRequest", (state) => {
     state.loading = true;
-  },
-  likeSuccess: (state, action) => {
+  })
+  builder.addCase("likeSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  likeFailure: (state, action) => {
+  })
+  builder.addCase("likeFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
+  })
+  builder.addCase("addCommentRequest", (state) => {
+    state.loading = true;
+  })
+  builder.addCase("addCommentSuccess", (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  })
+  builder.addCase("addCommentFailure", (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  })
+  builder.addCase("deleteCommentRequest", (state) => {
+    state.loading = true;
+  })
+  builder.addCase("deleteCommentSuccess", (state, action) => {
+    state.loading = false;
+    state.message = action.payload;
+  })
+  builder.addCase("deleteCommentFailure", (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  })
 
-  addCommentRequest: (state) => {
+  builder.addCase("newPostRequest", (state) => {
     state.loading = true;
-  },
-  addCommentSuccess: (state, action) => {
+  })
+  builder.addCase("newPostSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  addCommentFailure: (state, action) => {
+  })
+  builder.addCase("newPostFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  deleteCommentRequest: (state) => {
+  })
+  builder.addCase("updateCaptionRequest", (state) => {
     state.loading = true;
-  },
-  deleteCommentSuccess: (state, action) => {
+  })
+  builder.addCase("updateCaptionSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  deleteCommentFailure: (state, action) => {
+  })
+  builder.addCase("updateCaptionFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  newPostRequest: (state) => {
+  })
+  builder.addCase("deletePostRequest", (state) => {
     state.loading = true;
-  },
-  newPostSuccess: (state, action) => {
+  })
+  builder.addCase("deletePostSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  newPostFailure: (state, action) => {
+  })
+  builder.addCase("deletePostFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  updateCaptionRequest: (state) => {
+  })
+  builder.addCase("updateProfileRequest", (state) => {
     state.loading = true;
-  },
-  updateCaptionSuccess: (state, action) => {
+  })
+  builder.addCase("updateProfileSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  updateCaptionFailure: (state, action) => {
+  })
+  builder.addCase("updateProfileFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  deletePostRequest: (state) => {
+  })
+  builder.addCase("updatePasswordRequest", (state) => {
     state.loading = true;
-  },
-  deletePostSuccess: (state, action) => {
+  })
+  builder.addCase("updatePasswordSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  deletePostFailure: (state, action) => {
+  })
+  builder.addCase("updatePasswordFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  updateProfileRequest: (state) => {
+  })
+  builder.addCase("deleteProfileRequest", (state) => {
     state.loading = true;
-  },
-  updateProfileSuccess: (state, action) => {
+  })
+  builder.addCase("deleteProfileSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  updateProfileFailure: (state, action) => {
+  })
+  builder.addCase("deleteProfileFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  updatePasswordRequest: (state) => {
+  })
+  builder.addCase("forgotPasswordRequest", (state) => {
     state.loading = true;
-  },
-  updatePasswordSuccess: (state, action) => {
+  })
+  builder.addCase("forgotPasswordSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  updatePasswordFailure: (state, action) => {
+  })
+  builder.addCase("forgotPasswordFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  deleteProfileRequest: (state) => {
+  })
+  builder.addCase("resetPasswordRequest", (state) => {
     state.loading = true;
-  },
-  deleteProfileSuccess: (state, action) => {
+  })
+  builder.addCase("resetPasswordSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  deleteProfileFailure: (state, action) => {
+  })
+  builder.addCase("resetPasswordFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  forgotPasswordRequest: (state) => {
+  })
+  builder.addCase("followUserRequest", (state) => {
     state.loading = true;
-  },
-  forgotPasswordSuccess: (state, action) => {
+  })
+  builder.addCase("followUserSuccess", (state, action) => {
     state.loading = false;
     state.message = action.payload;
-  },
-  forgotPasswordFailure: (state, action) => {
+  })
+  builder.addCase("followUserFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-
-  resetPasswordRequest: (state) => {
-    state.loading = true;
-  },
-  resetPasswordSuccess: (state, action) => {
-    state.loading = false;
-    state.message = action.payload;
-  },
-  resetPasswordFailure: (state, action) => {
-    state.loading = false;
-    state.error = action.payload;
-  },
-
-  followUserRequest: (state) => {
-    state.loading = true;
-  },
-  followUserSuccess: (state, action) => {
-    state.loading = false;
-    state.message = action.payload;
-  },
-  followUserFailure: (state, action) => {
-    state.loading = false;
-    state.error = action.payload;
-  },
-  clearErrors: (state) => {
+  })
+  builder.addCase("clearErrors", (state) => {
     state.error = null;
-  },
-  clearMessage: (state) => {
+  })
+  builder.addCase("clearMessage", (state) => {
     state.message = null;
-  },
+  })
 });
 
-export const myPostsReducer = createReducer(initialState, {
-  myPostsRequest: (state) => {
+export const myPostsReducer = createReducer(initialState, builder => {
+  builder.addCase("myPostsRequest", (state) => {
     state.loading = true;
-  },
-  myPostsSuccess: (state, action) => {
+  })
+  builder.addCase("myPostsSuccess", (state, action) => {
     state.loading = false;
     state.posts = action.payload;
-  },
-  myPostsFailure: (state, action) => {
+  })
+  builder.addCase("myPostsFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-  clearErrors: (state) => {
+  })
+  builder.addCase("clearErrors", (state) => {
     state.error = null;
-  },
+  })
 });
 
-export const userPostsReducer = createReducer(initialState, {
-  userPostsRequest: (state) => {
+export const userPostsReducer = createReducer(initialState, builder => {
+  builder.addCase("userPostsRequest", (state) => {
     state.loading = true;
-  },
-  userPostsSuccess: (state, action) => {
+  })
+  builder.addCase("userPostsSuccess", (state, action) => {
     state.loading = false;
     state.posts = action.payload;
-  },
-  userPostsFailure: (state, action) => {
+  })
+  builder.addCase("userPostsFailure", (state, action) => {
     state.loading = false;
     state.error = action.payload;
-  },
-  clearErrors: (state) => {
+  })
+  builder.addCase("clearErrors", (state) => {
     state.error = null;
-  },
+  })
 });

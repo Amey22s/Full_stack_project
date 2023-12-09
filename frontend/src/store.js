@@ -7,6 +7,8 @@ import {
 } from './Reducers/User';
 import { likeReducer, myPostsReducer, userPostsReducer } from './Reducers/Post';
 
+import { adminReducer } from './Reducers/Admin';
+
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -16,6 +18,7 @@ const store = configureStore({
     myPosts: myPostsReducer,
     userProfile: userProfileReducer,
     userPosts: userPostsReducer,
+    admin:adminReducer
   },
 });
 

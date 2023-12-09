@@ -7,7 +7,7 @@ const {
   updateCaption,
   commentOnPost,
   deleteComment,
-} = require("../controllers/post");
+} = require("../controllers/postController");
 const { isAuthenticated } = require("../middlewares/auth");
 
 const router = express.Router();

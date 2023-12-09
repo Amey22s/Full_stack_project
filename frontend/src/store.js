@@ -7,6 +7,8 @@ import {
 } from './Reducers/User';
 import { likeReducer, myPostsReducer, userPostsReducer } from './Reducers/Post';
 
+import { messageReducer, allMessagesReducer, myConversationsReducer, newChatReducer } from './Reducers/Message';
+
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -16,6 +18,10 @@ const store = configureStore({
     myPosts: myPostsReducer,
     userProfile: userProfileReducer,
     userPosts: userPostsReducer,
+    message: messageReducer,
+    allMessages: allMessagesReducer,
+    myConversations: myConversationsReducer,
+    newChat: newChatReducer
   },
 });
 

@@ -16,6 +16,7 @@ import ResetPassword from './Components/ResetPassword/ResetPassword';
 import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
+import Inbox from './Components/Inbox/Inbox';
 
 import AdminRegister from './Components/AdminRegister/AdminRegister';
 
@@ -75,6 +76,11 @@ function App() {
         <Route
           path="/user/:id"
           element={isAuthenticated ? <UserProfile /> : <Login />}
+        />
+
+        <Route
+        path = "/inbox"
+        element={isAuthenticated ? <Inbox/> : <Login/> }
         />
 
         <Route path="search" element={<Search />} />

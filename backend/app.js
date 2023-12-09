@@ -20,12 +20,15 @@ app.use(cors({
 // Importing Routes
 const post = require("./routes/post");
 const user = require("./routes/user");
+const msg = require("./routes/message");
 const admin = require("./routes/admin");
 
 // Using Routes
 app.use("/api/v1", post);
 app.use("/api/v1", user);
+app.use("/api/v1/", msg);
 app.use("/api/v1", admin);
+
 
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 

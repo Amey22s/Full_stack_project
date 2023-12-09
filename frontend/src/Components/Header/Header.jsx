@@ -10,6 +10,8 @@ import {
   Search,
   AccountCircle,
   AccountCircleOutlined,
+  Message,
+  MessageOutlined
 } from "@mui/icons-material";
 
 const Header = () => {
@@ -20,6 +22,14 @@ const Header = () => {
         {tab === "/" ? <Home style={{ color: "black" }} /> : <HomeOutlined />}
       </Link>
 
+      <Link to="/inbox" onClick={() => setTab("/inbox")}>
+        {tab === "/inbox" ? (
+          <Message style={{ color: "black" }} />
+        ) : (
+          <MessageOutlined />
+        )}
+      </Link>
+
       <Link to="/newpost" onClick={() => setTab("/newpost")}>
         {tab === "/newpost" ? (
           <Add style={{ color: "black" }} />
@@ -27,6 +37,7 @@ const Header = () => {
           <AddOutlined />
         )}
       </Link>
+
 
       <Link to="/search" onClick={() => setTab("/search")}>
         {tab === "/search" ? (

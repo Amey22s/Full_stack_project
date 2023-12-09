@@ -30,6 +30,7 @@ const Admin = require("../models/Admin");
 exports.isAuthenticated = async (req, res, next) => {
   try {
     const { token } = req.cookies;
+    console.log("Token is ",token);
     if (typeof(token) === "undefined") {
         res.status(401).json({
         success: false,

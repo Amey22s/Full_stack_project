@@ -17,6 +17,8 @@ import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
 
+import AdminRegister from './Components/AdminRegister/AdminRegister';
+
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -39,6 +41,11 @@ function App() {
         <Route
           path="/register"
           element={isAuthenticated ? <Account /> : <Register />}
+        />
+
+        <Route
+          path="/registerAdmin"
+          element={isAuthenticated ? <Account /> : <AdminRegister />}
         />
 
         <Route

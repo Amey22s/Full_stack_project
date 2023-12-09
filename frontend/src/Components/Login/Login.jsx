@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../Actions/User";
 import { useAlert } from "react-alert";
 
+import { adminLogin } from "../../Actions/Admin";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +21,12 @@ const Login = () => {
     e.preventDefault();
 
     dispatch(loginUser(email, password));
+  };
+
+  const adminLoginHandler = (e) => {
+    e.preventDefault();
+
+    dispatch(adminLogin(email, password));
   };
 
   useEffect(() => {
@@ -36,7 +44,7 @@ const Login = () => {
     <div className="login">
       <form className="loginForm" onSubmit={loginHandler}>
         <Typography variant="h3" style={{ padding: "2vmax" }}>
-          Social Aap
+          NEU Social App
         </Typography>
 
         <input
@@ -61,8 +69,15 @@ const Login = () => {
 
         <Button type="submit">Login</Button>
 
+        <Button onClick={adminLoginHandler}>
+          Login as Admin
+        </Button>
+
         <Link to="/register">
           <Typography>New User?</Typography>
+        </Link>
+        <Link to="/registerAdmin">
+          <Typography>Admin Register</Typography>
         </Link>
       </form>
     </div>

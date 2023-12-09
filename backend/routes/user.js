@@ -13,8 +13,8 @@ const {
   forgotPassword,
   resetPassword,
   getMyPosts,
-  getUserPosts,
-} = require("../controllers/user");
+  getUserPosts
+} = require("../controllers/userController");
 const { isAuthenticated } = require("../middlewares/auth");
 const router = express.Router();
 

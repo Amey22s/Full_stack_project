@@ -43,7 +43,7 @@ exports.adminLogin = async (req, res) => {
 
       // console.log("Before status 200");
   
-      res.status(200).cookie("admin_token", token, options).json({
+      res.status(200).cookie("token", token, options).json({
         success: true,
         admin,
         token,
@@ -89,6 +89,23 @@ exports.adminLogin = async (req, res) => {
         message: "Admin registered successfully",
         admin: newAdmin,
         token,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  exports.myProfile = async (req, res) => {
+    try {
+      console.log("admin my profile = " + JSON.stringify(req.admin));
+      const admin = await Admin.findById(req.admin._id);
+  
+      res.status(200).json({
+        success: true,
+        admin,
       });
     } catch (error) {
       res.status(500).json({

@@ -30,7 +30,7 @@ const Admin = require("../models/Admin");
 exports.isAuthenticated = async (req, res, next) => {
   try {
     const { token } = req.cookies;
-    console.log("Token is ",token);
+    // console.log("Token is ",token);
     if (typeof(token) === "undefined") {
         res.status(401).json({
         success: false,
@@ -44,7 +44,7 @@ exports.isAuthenticated = async (req, res, next) => {
     req.user = await User.findById(decoded._id);
 
     // If user not found, try to find admin
-    if (!req.user) {
+    if ( typeof(req.user) === undefined) {
       req.admin = await Admin.findById(decoded._id);
     }
 

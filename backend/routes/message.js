@@ -3,7 +3,7 @@ const {
     getMyMessages,
     getMyConversations,
     sendMessage
-} = require("../controllers/message");
+} = require("../controllers/messageController");
 const { isAuthenticated } = require("../middlewares/auth");
 
 const router = express.Router();

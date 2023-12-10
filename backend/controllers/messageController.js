@@ -29,8 +29,13 @@ exports.sendMessage = async (req, res) => {
     sender.messages.unshift(message._id);
     receiver.messages.unshift(message._id);
 
-
     console.log("Message added in both chats")
+
+    if(!sender.conversations.includes(receiver._id))
+    {
+    sender.conversations.unshift(receiver._id);
+    receiver.conversations.unshift(sender._id);
+    }
 
     await sender.save();
     await receiver.save();
@@ -67,7 +72,7 @@ exports.getMyConversations = async (req, res) => {
       }
 
 
-    console.log("Conversations in getMyConversations bakend is ",conversations);
+    // console.log("Conversations in getMyConversations bakend is ",conversations);
   
       res.status(200).json({
         success: true,
@@ -92,23 +97,32 @@ exports.getMyConversations = async (req, res) => {
       console.log("Receiver is ",rUserId)
   
       const messages = [];
+
+      console.log(JSON.stringify(senderUser.messages));
   
       for (let i = 0; i < senderUser.messages.length; i++) {
         const message = await Message.findById(senderUser.messages[i]).populate(
-        );
+          );
+
+          console.log("Message object is ",message);
 
 
-        // console.log("Message receiver is ",message.receiver._id)
-        // console.log("Message sender is ",message.sender._id)
-        // console.log("Sender name is ",message.sender.name)
-        // console.log("Message object is ",JSON.stringify(message));
-        if(JSON.stringify(message.receiver._id) === rUserId || JSON.stringify(message.sender._id) === rUserId)
-        {
-            messages.push(message);
+          console.log("Message receiver is ",message.receiver._id)
+          console.log("Message sender is ",message.sender._id)
+          console.log("i is ",i)
+          if(JSON.stringify(message.receiver._id) === rUserId || JSON.stringify(message.sender._id) === rUserId)
+          {
+            console.log("Here")
+              messages.push(message);
         }
+        // if(message.receiver === rUserId || message.sender === rUserId)
+        // {
+
+        //     messages.push(message);
+        // }
       }
 
-      // console.log("Messages in getMyMessages bakend is ",messages);
+      console.log("Messages in getMyMessages bakend is ",messages);
   
       res.status(200).json({
         success: true,

@@ -117,6 +117,11 @@ function App() {
           path = "/inbox"
           element={isAuthenticated ? <Inbox/> : <Login/> }
           />
+
+        <Route
+        path = "/inbox/:id"
+        element={isAuthenticated ? <Inbox/> : <Login/> }
+        />
   
           <Route path="search" element={<Search />} />
           </>

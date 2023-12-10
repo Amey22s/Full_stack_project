@@ -107,3 +107,39 @@ exports.sellItem = async (req, res) => {
     });
   }
 };
+
+// Get all items that are on sale (not posted by the current user)
+exports.getItemsOnSale = async (req, res) => {
+  try {
+    const items = await Item.find({
+      owner: { $ne: req.user._id },
+      status: 'available',
+    });
+    res.json({ success: true, items });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Get all items posted by the current user
+exports.getMyItems = async (req, res) => {
+  try {
+    const items = await Item.find({ owner: req.user._id });
+    res.json({ success: true, items });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Get all approval requests for the current user's items
+exports.getApprovalRequests = async (req, res) => {
+  try {
+    const items = await Item.find({
+      owner: req.user._id,
+      'interestedBuyers.0': { $exists: true },
+    });
+    res.json({ success: true, items });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

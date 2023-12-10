@@ -50,5 +50,25 @@ export const adminLogin = (email, password) => async (dispatch) => {
       });
     }
   };
+
+  export const loadAdmin = () => async (dispatch) => {
+    try {
+      dispatch({
+        type: "LoadAdminRequest",
+      });
+  
+      const { data } = await axios.get("/api/v1/adminLoad");
+  
+      dispatch({
+        type: "LoadAdminSuccess",
+        payload: data.admin,
+      });
+    } catch (error) {
+      dispatch({
+        type: "LoadAdminFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
   
   

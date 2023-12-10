@@ -46,13 +46,21 @@ exports.register = async (req, res) => {
   }
 };
 
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+
+    console.log("email pwd in user login is ",email," ",password)
+
+
     const user = await User.findOne({ email })
       .select("+password")
       .populate("posts followers following");
+
+
+      console.log("user in user login is ",user)
 
     if (!user) {
       return res.status(400).json({
@@ -89,6 +97,7 @@ exports.login = async (req, res) => {
     });
   }
 };
+
 
 exports.logout = async (req, res) => {
   try {

@@ -1,27 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 const initialState = {};
-// const LoginRequest = createAction()
-// const LoginSuccess = createAction()
-// const LoginFailure = createAction()
-// const RegisterRequest = createAction()
-// const RegisterSuccess = createAction()
-// const RegisterFailure = createAction()
-// const LoadUserRequest = createAction()
-// const LoadUserSuccess = createAction()
-// const LoadUserFailure = createAction()
-// const LogoutUserRequest = createAction()
-// const LogoutUserSuccess = createAction()
-// const LogoutUserFailure = createAction()
-// const clearErrors = createAction()
-// const postOfFollowingRequest = createAction()
-// const postOfFollowingSuccess = createAction()
-// const postOfFollowingFailure = createAction()
-// const allUsersRequest = createAction()
-// const allUsersSuccess = createAction()
-// const allUsersFailure = createAction()
-// const userProfileRequest = createAction()
-// const userProfileSuccess = createAction()
-// const userProfileFailure = createAction()
+
 
 
 export const userReducer = createReducer(initialState, builder => {

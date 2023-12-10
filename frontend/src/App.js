@@ -16,77 +16,143 @@ import ResetPassword from './Components/ResetPassword/ResetPassword';
 import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
+
 import RegisterTrader from './Components/TraderRegister/TraderRegister';
 import Marketplace from './Components/Marketplace/Marketplace';
 import NewItem from './Components/NewItem/NewItem';
 
+import Inbox from './Components/Inbox/Inbox';
+
+import AdminRegister from './Components/AdminRegister/AdminRegister';
+import {loadAdmin} from './Actions/Admin';
+import AdminHeader from './Components/AdminHeader/AdminHeader';
+import {AdminHome} from './Components/AdminHome/AdminHome';
+import {AdminAccounts} from './Components/AdminAccounts/AdminAccounts';
+import {AdminPosts} from './Components/AdminPosts/AdminPosts';
+
+
 function App() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(loadUser());
-  }, [dispatch]);
+
+  // useEffect(() => {
+  //   dispatch(loadUser());
+  // }, [dispatch]);
+
+  const { isAdmin, isAuthenticated: adminAuth } = useSelector((state) => state.admin);
 
   const { isAuthenticated } = useSelector((state) => state.user);
 
+  useEffect(() => {
+
+    console.log("isAuthenticated = " + isAuthenticated);
+    console.log("isAdmin = " + isAdmin);
+    console.log("adminAuth = " + adminAuth);
+
+
+        
+
+
+    if (adminAuth && isAdmin) {
+      dispatch(loadAdmin());
+    } else if (isAuthenticated) {
+      dispatch(loadUser());
+    }
+  }, [dispatch, isAuthenticated, isAdmin, adminAuth]);
+
+  //const { isAuthenticated } = useSelector((state) => state.user);
+
   return (
     <Router>
-      {isAuthenticated && <Header />}
+      {/* {isAuthenticated && <Header />} */}
+      {adminAuth && isAdmin && <AdminHeader />}
+      {isAuthenticated && !isAdmin && <Header />}
+
 
       <Routes>
-        <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
-        <Route
-          path="/account"
-          element={isAuthenticated ? <Account /> : <Login />}
-        />
+        {isAdmin && (
+          <>
+          <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
+          <Route path="/allAccounts" element={adminAuth ? <AdminAccounts /> : <Login />} />
+          <Route path="/allPosts" element={adminAuth ? <AdminPosts /> : <Login  />} />
+          </>
+        )}
 
-        <Route
+        {!isAdmin && (
+          <>
+          <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
+          <Route
+            path="/account"
+            element={isAuthenticated ? <Account /> : <Login />}
+          />
+  
+          <Route
+            path="/register"
+            element={isAuthenticated ? <Account /> : <Register />}
+          />
+  
+          <Route
+            path="/registerAdmin"
+            element={isAuthenticated ? <Account /> : <AdminRegister />}
+          />
+              <Route
           path="/marketplace"
           element={isAuthenticated ? <Marketplace /> : <Login />}
         />
 
-        <Route
-          path="/register"
-          element={isAuthenticated ? <Account /> : <Register />}
-        />
+       
 
         <Route
           path="/registerTrader"
           element={isAuthenticated ? <Account /> : <RegisterTrader />}
         />
 
-        <Route
-          path="/newpost"
-          element={isAuthenticated ? <NewPost /> : <Login />}
-        />
+        
 
         <Route path="/newitem" element={<NewItem />} />
+  
+          <Route
+            path="/newpost"
+            element={isAuthenticated ? <NewPost /> : <Login />}
+          />
+  
+          <Route
+            path="/update/profile"
+            element={isAuthenticated ? <UpdateProfile /> : <Login />}
+          />
+          <Route
+            path="/update/password"
+            element={isAuthenticated ? <UpdatePassword /> : <Login />}
+          />
+  
+          <Route
+            path="/forgot/password"
+            element={isAuthenticated ? <UpdatePassword /> : <ForgotPassword />}
+          />
+  
+          <Route
+            path="/password/reset/:token"
+            element={isAuthenticated ? <UpdatePassword /> : <ResetPassword />}
+          />
+  
+          <Route
+            path="/user/:id"
+            element={isAuthenticated ? <UserProfile /> : <Login />}
+          />
+  
+          <Route
+          path = "/inbox"
+          element={isAuthenticated ? <Inbox/> : <Login/> }
+          />
 
         <Route
-          path="/update/profile"
-          element={isAuthenticated ? <UpdateProfile /> : <Login />}
+        path = "/inbox/:id"
+        element={isAuthenticated ? <Inbox/> : <Login/> }
         />
-        <Route
-          path="/update/password"
-          element={isAuthenticated ? <UpdatePassword /> : <Login />}
-        />
-
-        <Route
-          path="/forgot/password"
-          element={isAuthenticated ? <UpdatePassword /> : <ForgotPassword />}
-        />
-
-        <Route
-          path="/password/reset/:token"
-          element={isAuthenticated ? <UpdatePassword /> : <ResetPassword />}
-        />
-
-        <Route
-          path="/user/:id"
-          element={isAuthenticated ? <UserProfile /> : <Login />}
-        />
-
-        <Route path="search" element={<Search />} />
-
+  
+          <Route path="search" element={<Search />} />
+          </>
+  
+        )}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

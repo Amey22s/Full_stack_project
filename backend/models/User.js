@@ -46,6 +46,20 @@ const userSchema = new mongoose.Schema({
     },
   ],
 
+  conversations: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+
+  messages: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Message"
+      }
+  ],
+
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });

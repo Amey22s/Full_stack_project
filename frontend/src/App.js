@@ -16,6 +16,9 @@ import ResetPassword from './Components/ResetPassword/ResetPassword';
 import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
+import RegisterTrader from './Components/TraderRegister/TraderRegister';
+import Marketplace from './Components/Marketplace/Marketplace';
+import NewItem from './Components/NewItem/NewItem';
 
 function App() {
   const dispatch = useDispatch();
@@ -37,14 +40,26 @@ function App() {
         />
 
         <Route
+          path="/marketplace"
+          element={isAuthenticated ? <Marketplace /> : <Login />}
+        />
+
+        <Route
           path="/register"
           element={isAuthenticated ? <Account /> : <Register />}
+        />
+
+        <Route
+          path="/registerTrader"
+          element={isAuthenticated ? <Account /> : <RegisterTrader />}
         />
 
         <Route
           path="/newpost"
           element={isAuthenticated ? <NewPost /> : <Login />}
         />
+
+        <Route path="/newitem" element={<NewItem />} />
 
         <Route
           path="/update/profile"

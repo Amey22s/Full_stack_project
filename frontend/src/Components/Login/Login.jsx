@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../Actions/User";
 import { useAlert } from "react-alert";
 
+import {traderLogin} from '../../Actions/Trader';
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +22,12 @@ const Login = () => {
 
     dispatch(loginUser(email, password));
   };
+
+  const traderLoginHandler = (e) => {
+    e.preventDefault();
+
+    dispatch(traderLogin(email,password));
+  } 
 
   useEffect(() => {
     if (error) {
@@ -60,10 +68,19 @@ const Login = () => {
         </Link>
 
         <Button type="submit">Login</Button>
+        <Button onClick={traderLoginHandler}>
+          Login as Trader
+        </Button>
+
+        <Link to='/registerTrader'>
+          <Typography>New Trader?</Typography>
+        </Link>
 
         <Link to="/register">
           <Typography>New User?</Typography>
         </Link>
+
+
       </form>
     </div>
   );

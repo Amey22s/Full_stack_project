@@ -7,6 +7,9 @@ import {
 } from './Reducers/User';
 import { likeReducer, myPostsReducer, userPostsReducer } from './Reducers/Post';
 
+import { traderReducer } from './Reducers/Trader';
+import { itemReducer } from './Reducers/Item';
+
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -16,6 +19,8 @@ const store = configureStore({
     myPosts: myPostsReducer,
     userProfile: userProfileReducer,
     userPosts: userPostsReducer,
+    trader: traderReducer,
+    item: itemReducer,
   },
 });
 

@@ -6,8 +6,12 @@ const cloudinary = require("cloudinary");
 exports.adminLogin = async (req, res) => {
     try {
       const { email, password } = req.body;
+
+      // console.log("Email is ",email," password is ",password);
   
-      const admin = await Admin.findOne({ email });
+      const admin = await Admin.findOne({ email }).select("+password");
+
+      // console.log("Admin is ",admin);
   
       if (!admin) {
         return res.status(400).json({
@@ -26,11 +30,15 @@ exports.adminLogin = async (req, res) => {
       }
   
       const token = await admin.generateToken();
+
+      // console.log("Token generated in adminlogin is ",token)
   
       const options = {
         expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
         httpOnly: true,
       };
+
+      // console.log("Before status 200");
   
       res.status(200).cookie("admin_token", token, options).json({
         success: true,

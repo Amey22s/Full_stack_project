@@ -407,11 +407,12 @@ export const fetchSearchResults = (searchTerm) => async(dispatch) => {
 
   try {
 
-    console.log("NEWS api key is ",process.env.NEWS_API_KEY)
-    console.log("search term is ",searchTerm)
+    // console.log("NEWS api key is ",process.env.NEWS_API_KEY)
+    // console.log("NEWS api key is ",process.env.)
+    // console.log("search term is ",searchTerm)
 
 
-  const {data} = await axios.get(`https://newsapi.org/v2/everything?q=${searchTerm}&apiKey=44f555cae8bf4b1bafddc4c071147f6f`);
+  const {data} = await axios.get(`https://newsapi.org/v2/everything?q=${searchTerm}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`);
 
   console.log("Data from api is ",data);
 

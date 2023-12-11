@@ -17,7 +17,6 @@ import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
 import Inbox from './Components/Inbox/Inbox';
-import Article from './Components/Article/Article';
 import News from './Components/News/News';
 
 import AdminRegister from './Components/AdminRegister/AdminRegister';

@@ -3,7 +3,6 @@ import { Typography } from '@mui/material';
 import './Article.css';
 
 function Article(selectedArticle) {
-// console.log("Article  is ",selectedArticle);
 
   if (!selectedArticle) {
     return null;

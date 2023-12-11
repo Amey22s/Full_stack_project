@@ -59,9 +59,12 @@ function App() {
   }, [state.searchResults]);
 
   useEffect(() => {
-    console.log('isAuthenticated = ' + isAuthenticated);
-    console.log('isAdmin = ' + isAdmin);
-    console.log('adminAuth = ' + adminAuth);
+
+
+    // console.log("isAuthenticated = " + isAuthenticated);
+    // console.log("isAdmin = " + isAdmin);
+    // console.log("adminAuth = " + adminAuth);
+
 
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());

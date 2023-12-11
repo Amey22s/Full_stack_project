@@ -55,11 +55,6 @@ function App() {
     // console.log("adminAuth = " + adminAuth);
 
     console.log("State is ",state);
-
-
-        
-
-
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());
     } else if (isAuthenticated) {

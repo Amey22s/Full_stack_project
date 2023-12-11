@@ -14,7 +14,7 @@ import { itemReducer } from './Reducers/Item';
 
 
 import { messageReducer, allMessagesReducer, myConversationsReducer, newChatReducer } from './Reducers/Message';
-import { adminReducer } from './Reducers/Admin';
+import { adminReducer, allUsersForAdminReducer} from './Reducers/Admin';
 
 
 
@@ -36,6 +36,7 @@ const store = configureStore({
     myConversations: myConversationsReducer,
     newChat: newChatReducer,
     admin:adminReducer,
+    allUsersForAdmin:allUsersForAdminReducer
     news:newsReducer
   },
 });

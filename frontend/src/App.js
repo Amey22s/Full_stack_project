@@ -28,18 +28,16 @@ import AdminRegister from './Components/AdminRegister/AdminRegister';
 import {loadAdmin} from './Actions/Admin';
 import AdminHeader from './Components/AdminHeader/AdminHeader';
 import {AdminHome} from './Components/AdminHome/AdminHome';
-import {AdminAccounts} from './Components/AdminAccounts/AdminAccounts';
+import AdminAccount from './Components/AdminAccounts/AdminAccount';
 import {AdminPosts} from './Components/AdminPosts/AdminPosts';
+import AdminUsers from './Components/AdminUsers/AdminUsers';
+import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
+import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
 
 
 function App() {
   const dispatch = useDispatch();
   const state = useState();
-
-  // useEffect(() => {
-  //   dispatch(loadUser());
-  // }, [dispatch]);
-
 
   const { isAdmin, isAuthenticated: adminAuth } = useSelector((state) => state.admin);
 
@@ -82,8 +80,10 @@ function App() {
         {isAdmin && (
           <>
           <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
-          <Route path="/allAccounts" element={adminAuth ? <AdminAccounts /> : <Login />} />
+          <Route path="/account" element={adminAuth ? <AdminAccount /> : <Login />} />
+          <Route path="/allUsers" element={adminAuth ? <AdminUsers /> : <Login  />} />
           <Route path="/allPosts" element={adminAuth ? <AdminPosts /> : <Login  />} />
+          <Route path="/adminUsers/:id" element={adminAuth ? <UserProfileForAdmin /> : <Login />}/>
           </>
         )}
 

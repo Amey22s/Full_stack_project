@@ -1,40 +1,46 @@
-import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./Components/Header/Header";
-import Login from "./Components/Login/Login";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { loadUser } from "./Actions/User";
-import Home from "./Components/Home/Home";
-import Account from "./Components/Account/Account";
-import NewPost from "./Components/NewPost/NewPost";
-import Register from "./Components/Register/Register";
-import UpdateProfile from "./Components/UpdateProfile/UpdateProfile";
-import UpdatePassword from "./Components/UpdatePassword/UpdatePassword";
-import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
-import ResetPassword from "./Components/ResetPassword/ResetPassword";
-import UserProfile from "./Components/UserProfile/UserProfile";
-import Search from "./Components/Search/Search";
-import NotFound from "./Components/NotFound/NotFound";
 
-import RegisterTrader from "./Components/TraderRegister/TraderRegister";
-import Marketplace from "./Components/Marketplace/Marketplace";
-import NewItem from "./Components/NewItem/NewItem";
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './Components/Header/Header';
+import Login from './Components/Login/Login';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { loadUser } from './Actions/User';
+import Home from './Components/Home/Home';
+import Account from './Components/Account/Account';
+import NewPost from './Components/NewPost/NewPost';
+import Register from './Components/Register/Register';
+import UpdateProfile from './Components/UpdateProfile/UpdateProfile';
+import UpdatePassword from './Components/UpdatePassword/UpdatePassword';
+import ForgotPassword from './Components/ForgotPassword/ForgotPassword';
+import ResetPassword from './Components/ResetPassword/ResetPassword';
+import UserProfile from './Components/UserProfile/UserProfile';
+import Search from './Components/Search/Search';
+import NotFound from './Components/NotFound/NotFound';
 
-import Inbox from "./Components/Inbox/Inbox";
-import News from "./Components/News/News";
+import RegisterTrader from './Components/TraderRegister/TraderRegister';
+import Marketplace from './Components/Marketplace/Marketplace';
+import NewItem from './Components/NewItem/NewItem';
 
-import AdminRegister from "./Components/AdminRegister/AdminRegister";
-import { loadAdmin } from "./Actions/Admin";
-import AdminHeader from "./Components/AdminHeader/AdminHeader";
-import { AdminHome } from "./Components/AdminHome/AdminHome";
-import { AdminAccounts } from "./Components/AdminAccounts/AdminAccounts";
-import { AdminPosts } from "./Components/AdminPosts/AdminPosts";
+import Inbox from './Components/Inbox/Inbox';
+import News from './Components/News/News';
+
+import AdminRegister from './Components/AdminRegister/AdminRegister';
+import {loadAdmin} from './Actions/Admin';
+import AdminHeader from './Components/AdminHeader/AdminHeader';
+import {AdminHome} from './Components/AdminHome/AdminHome';
+import AdminAccount from './Components/AdminAccounts/AdminAccount';
+import {AdminPosts} from './Components/AdminPosts/AdminPosts';
+import AdminUsers from './Components/AdminUsers/AdminUsers';
+import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
+import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
 
 import { loadTrader } from "./Actions/Trader";
+
 function App() {
   const dispatch = useDispatch();
   const state = useState();
+
 
   // useEffect(() => {
   //   dispatch(loadUser());
@@ -46,6 +52,7 @@ function App() {
   const { isTrader, isAuthenticated: traderAuth } = useSelector(
     (state) => state.trader
   );
+
   const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -78,15 +85,12 @@ function App() {
       <Routes>
         {isAdmin && (
           <>
-            <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
-            <Route
-              path="/allAccounts"
-              element={adminAuth ? <AdminAccounts /> : <Login />}
-            />
-            <Route
-              path="/allPosts"
-              element={adminAuth ? <AdminPosts /> : <Login />}
-            />
+
+          <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
+          <Route path="/account" element={adminAuth ? <AdminAccount /> : <Login />} />
+          <Route path="/allUsers" element={adminAuth ? <AdminUsers /> : <Login  />} />
+          <Route path="/allPosts" element={adminAuth ? <AdminPosts /> : <Login  />} />
+          <Route path="/adminUsers/:id" element={adminAuth ? <UserProfileForAdmin /> : <Login />}/>
           </>
         )}
 

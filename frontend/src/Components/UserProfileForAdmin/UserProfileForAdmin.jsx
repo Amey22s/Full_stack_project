@@ -6,13 +6,14 @@ import { useParams } from "react-router-dom";
 import {
   followAndUnfollowUser,
   getUserPosts,
-  getUserProfile,
+  getUserProfile
 } from "../../Actions/User";
+import { deleteMyProfile } from "../../Actions/Admin";
 import Loader from "../Loader/Loader";
 import Post from "../Post/Post";
 import User from "../User/User";
 
-const UserProfile = () => {
+const UserProfileForAdmin = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
 
@@ -85,6 +86,11 @@ const UserProfile = () => {
     }
   }, [alert, error, message, followError, userError, dispatch]);
 
+  const deleteProfileHandler = async () => {
+    await dispatch(deleteMyProfile());
+    //dispatch(logoutUser());
+  };
+
   return loading === true || userLoading === true ? (
     <Loader />
   ) : (
@@ -102,6 +108,7 @@ const UserProfile = () => {
               ownerImage={post.owner.avatar.url}
               ownerName={post.owner.name}
               ownerId={post.owner._id}
+              isDelete={true}
             />
           ))
         ) : (
@@ -136,6 +143,15 @@ const UserProfile = () => {
               <Typography>Posts</Typography>
               <Typography>{user.posts.length}</Typography>
             </div>
+
+            <Button
+                variant="text"
+                style={{ color: "red", margin: "2vmax" }}
+                onClick={deleteProfileHandler}
+                disabled={followLoading}
+                >
+                Delete Profile
+            </Button>
 
             {myProfile ? null : (
               <Button
@@ -201,4 +217,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default UserProfileForAdmin;

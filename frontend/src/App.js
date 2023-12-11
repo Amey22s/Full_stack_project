@@ -16,6 +16,11 @@ import ResetPassword from './Components/ResetPassword/ResetPassword';
 import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
+
+import RegisterTrader from './Components/TraderRegister/TraderRegister';
+import Marketplace from './Components/Marketplace/Marketplace';
+import NewItem from './Components/NewItem/NewItem';
+
 import Inbox from './Components/Inbox/Inbox';
 import News from './Components/News/News';
 
@@ -25,6 +30,7 @@ import AdminHeader from './Components/AdminHeader/AdminHeader';
 import {AdminHome} from './Components/AdminHome/AdminHome';
 import {AdminAccounts} from './Components/AdminAccounts/AdminAccounts';
 import {AdminPosts} from './Components/AdminPosts/AdminPosts';
+
 
 function App() {
   const dispatch = useDispatch();
@@ -52,6 +58,10 @@ function App() {
 
     console.log("State is ",state);
 
+
+        
+
+
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());
     } else if (isAuthenticated) {
@@ -66,6 +76,7 @@ function App() {
       {/* {isAuthenticated && <Header />} */}
       {adminAuth && isAdmin && <AdminHeader />}
       {isAuthenticated && !isAdmin && <Header />}
+
 
       <Routes>
         {isAdmin && (
@@ -100,6 +111,21 @@ function App() {
             path="/registerAdmin"
             element={isAuthenticated ? <Account /> : <AdminRegister />}
           />
+              <Route
+          path="/marketplace"
+          element={isAuthenticated ? <Marketplace /> : <Login />}
+        />
+
+       
+
+        <Route
+          path="/registerTrader"
+          element={isAuthenticated ? <Account /> : <RegisterTrader />}
+        />
+
+        
+
+        <Route path="/newitem" element={<NewItem />} />
   
           <Route
             path="/newpost"

@@ -12,7 +12,7 @@ import { useAlert } from "react-alert";
 
 function Inbox() {
   const [receiver, setReceiver] = useState("");
-  // const [selectedConversation, setSelectedConversation] = useState([]);
+  const [selectedConv, setSelectedConv] = useState([]);
 
   // const sender = {};
   // var receiver = "";
@@ -36,11 +36,13 @@ function Inbox() {
     // Fetch conversations from backend API
     console.log("User is ",user)
     dispatch(getMyConversations())
+    setSelectedConv(selectedConversation);
   },[dispatch]);
 
   useEffect(() => {
     dispatch(getAllMessages(params.id));
     setReceiver(params.id)
+    setSelectedConv(selectedConversation);
     console.log("Receiver in Inbox is ",receiver);
     console.log("SelecteConversation in Inbox is ",selectedConversation);
     console.log("Conversations in Inbox is ",conversations)
@@ -68,25 +70,21 @@ function Inbox() {
 
     <div className="inbox">
       <div className="inboxleft">
-      {
-      selectedConversation && (
+      { (
         <div>
           <h2>Conversation with {receiver}</h2>
           <ul>
-            {selectedConversation.map(message => (
+            {selectedConversation && (selectedConversation.map(message => (
               <li key={message._id}>
-                {/* <Avatar
-          src={message.sender.avatar.url}
-          sx={{ height: "2vmax", width: "2vmax" }}
-            /> */}
-        {message.sender +": "+message.text}
-        </li>
-            ))}
+              {message.sender +": "+message.text}
+              </li>
+            )))}
           </ul>
           <NewChat 
           sender = {user._id}
           receiver = {receiver} />
-          </div>)
+          </div>
+      )
       }
       </div>
       <div className="inboxright">

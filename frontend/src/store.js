@@ -4,6 +4,7 @@ import {
   postOfFollowingReducer,
   userProfileReducer,
   userReducer,
+  newsReducer
 } from './Reducers/User';
 import { likeReducer, myPostsReducer, userPostsReducer } from './Reducers/Post';
 
@@ -25,8 +26,8 @@ const store = configureStore({
     allMessages: allMessagesReducer,
     myConversations: myConversationsReducer,
     newChat: newChatReducer,
-    admin:adminReducer
-
+    admin:adminReducer,
+    news:newsReducer
   },
 });
 

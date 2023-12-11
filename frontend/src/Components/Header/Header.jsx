@@ -11,7 +11,9 @@ import {
   AccountCircle,
   AccountCircleOutlined,
   Message,
-  MessageOutlined
+  MessageOutlined,
+  Newspaper,
+  NewspaperOutlined
 } from "@mui/icons-material";
 
 const Header = () => {
@@ -44,6 +46,14 @@ const Header = () => {
           <Search style={{ color: "black" }} />
         ) : (
           <SearchOutlined />
+        )}
+      </Link>
+
+      <Link to="/news" onClick={() => setTab("/news")}>
+        {tab === "/news" ? (
+          <Newspaper style={{ color: "black" }} />
+        ) : (
+          <NewspaperOutlined />
         )}
       </Link>
 

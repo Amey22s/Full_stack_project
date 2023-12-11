@@ -1,5 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
-const initialState = {};
+const initialState = {
+};
 
 
 
@@ -113,3 +114,21 @@ export const userProfileReducer = createReducer(initialState, builder => {
     state.error = null;
   })
 });
+
+export const newsReducer = createReducer(initialState, builder => {
+  builder.addCase("updateSearchTerm", (state,action) => {
+    state.searchTerm = action.payload;
+  })
+  builder.addCase("setSearchResult", (state,action) => {
+    state.searchResults = action.payload;
+  })
+  builder.addCase("selectArticle", (state,action) => {
+    state.selectedArticle = action.payload;
+  })
+  builder.addCase("newsFailure", (state,action) => {
+    state.error = action.payload;
+  })
+  builder.addCase("clearErrors", (state) => {
+    state.error = null;
+  })
+})

@@ -1,0 +1,24 @@
+.marketplace .tabs {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f1f1f1;
+    padding: 10px;
+  }
+  
+  .marketplace .tabs button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .marketplace .tabs button:hover {
+    background-color: #ddd;
+  }
+  
+  .marketplace .itemsList {
+    margin-top: 20px;
+  }
+  

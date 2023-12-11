@@ -1,4 +1,3 @@
-
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Components/Header/Header';
@@ -26,21 +25,20 @@ import Inbox from './Components/Inbox/Inbox';
 import News from './Components/News/News';
 
 import AdminRegister from './Components/AdminRegister/AdminRegister';
-import {loadAdmin} from './Actions/Admin';
+import { loadAdmin } from './Actions/Admin';
 import AdminHeader from './Components/AdminHeader/AdminHeader';
-import {AdminHome} from './Components/AdminHome/AdminHome';
+import { AdminHome } from './Components/AdminHome/AdminHome';
 import AdminAccount from './Components/AdminAccounts/AdminAccount';
-import {AdminPosts} from './Components/AdminPosts/AdminPosts';
+import { AdminPosts } from './Components/AdminPosts/AdminPosts';
 import AdminUsers from './Components/AdminUsers/AdminUsers';
 import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
 
-import { loadTrader } from "./Actions/Trader";
+import { loadTrader } from './Actions/Trader';
 
 function App() {
   const dispatch = useDispatch();
   const state = useState();
-
 
   // useEffect(() => {
   //   dispatch(loadUser());
@@ -56,14 +54,14 @@ function App() {
   const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log("Search results is ", state.searchResults);
-    localStorage.setItem("searchResults", JSON.stringify(state.searchResults));
+    console.log('Search results is ', state.searchResults);
+    localStorage.setItem('searchResults', JSON.stringify(state.searchResults));
   }, [state.searchResults]);
 
   useEffect(() => {
-    console.log("isAuthenticated = " + isAuthenticated);
-    console.log("isAdmin = " + isAdmin);
-    console.log("adminAuth = " + adminAuth);
+    console.log('isAuthenticated = ' + isAuthenticated);
+    console.log('isAdmin = ' + isAdmin);
+    console.log('adminAuth = ' + adminAuth);
 
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());
@@ -85,18 +83,40 @@ function App() {
       <Routes>
         {isAdmin && (
           <>
-
-          <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
-          <Route path="/account" element={adminAuth ? <AdminAccount /> : <Login />} />
-          <Route path="/allUsers" element={adminAuth ? <AdminUsers /> : <Login  />} />
-          <Route path="/allPosts" element={adminAuth ? <AdminPosts /> : <Login  />} />
-          <Route path="/adminUsers/:id" element={adminAuth ? <UserProfileForAdmin /> : <Login />}/>
+            <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
+            <Route
+              path="/account"
+              element={adminAuth ? <AdminAccount /> : <Login />}
+            />
+            <Route
+              path="/allUsers"
+              element={adminAuth ? <AdminUsers /> : <Login />}
+            />
+            <Route
+              path="/allPosts"
+              element={adminAuth ? <AdminPosts /> : <Login />}
+            />
+            <Route
+              path="/adminUsers/:id"
+              element={adminAuth ? <UserProfileForAdmin /> : <Login />}
+            />
           </>
         )}
 
         {!isAdmin && (
           <>
-            <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
+            <Route
+              path="/"
+              element={
+                isAuthenticated ? (
+                  <Home />
+                ) : traderAuth ? (
+                  <Marketplace />
+                ) : (
+                  <Login />
+                )
+              }
+            />
             <Route
               path="/account"
               element={isAuthenticated ? <Account /> : <Login />}
@@ -117,6 +137,7 @@ function App() {
               path="/registerAdmin"
               element={isAuthenticated ? <Account /> : <AdminRegister />}
             />
+
             <Route
               path="/marketplace"
               element={isAuthenticated ? <Marketplace /> : <Login />}

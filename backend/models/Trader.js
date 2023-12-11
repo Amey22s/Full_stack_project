@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const traderSchema = new mongoose.Schema({
   name: {
@@ -48,7 +51,36 @@ const traderSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+// Hash the password before saving the trader document
+traderSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
 
-// Password hashing and other methods can be added here
+// Method to compare provided password with the hashed password in the database
+traderSchema.methods.matchPassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+// Method to generate a JWT token
+traderSchema.methods.generateToken = function () {
+  return jwt.sign({ _id: this._id }, process.env.JWT_SECRET);
+};
+
+// Method to generate a password reset token
+traderSchema.methods.getResetPasswordToken = function () {
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  // Hash the reset token and set the reset password expire time
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
 
 module.exports = mongoose.model('Trader', traderSchema);

@@ -86,6 +86,8 @@ const Post = ({
     });
   }, [likes, user._id]);
 
+  console.log("user inside post = ", user);
+
   return (
     <div className="post">
       <div className="postHeader">

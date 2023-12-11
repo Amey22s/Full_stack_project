@@ -8,6 +8,8 @@ import {
   AccountCircleOutlined,
   Image,
   ImageOutlined,
+  People,
+  PeopleOutlined,
 } from "@mui/icons-material";
 
 const AdminHeader = () => {
@@ -22,14 +24,22 @@ const AdminHeader = () => {
         )}
       </Link>
 
-      <Link to="/allAccounts" onClick={() => setTab("/allAccounts")}>
-        {tab === "/allAccounts" ? (
+      <Link to="/account" onClick={() => setTab("/account")}>
+        {tab === "/account" ? (
           <AccountCircle style={{ color: "black" }} />
         ) : (
           <AccountCircleOutlined />
         )}
       </Link>
 
+      <Link to="/allUsers" onClick={() => setTab("/allUsers")}>
+         {tab === "/allUsers" ? (
+           <People style={{ color: "black" }} />
+         ) : (
+           <PeopleOutlined />
+         )}
+       </Link>
+       
       <Link to="/allPosts" onClick={() => setTab("/allPosts")}>
         {tab === "/allPosts" ? (
           <Image style={{ color: "black" }} />

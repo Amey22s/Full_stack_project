@@ -9,7 +9,7 @@ import { likeReducer, myPostsReducer, userPostsReducer } from './Reducers/Post';
 
 
 import { messageReducer, allMessagesReducer, myConversationsReducer, newChatReducer } from './Reducers/Message';
-import { adminReducer } from './Reducers/Admin';
+import { adminReducer, allUsersForAdminReducer} from './Reducers/Admin';
 
 
 const store = configureStore({
@@ -25,7 +25,8 @@ const store = configureStore({
     allMessages: allMessagesReducer,
     myConversations: myConversationsReducer,
     newChat: newChatReducer,
-    admin:adminReducer
+    admin:adminReducer,
+    allUsersForAdmin:allUsersForAdminReducer
 
   },
 });

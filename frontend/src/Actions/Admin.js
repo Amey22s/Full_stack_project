@@ -70,5 +70,71 @@ export const adminLogin = (email, password) => async (dispatch) => {
       });
     }
   };
+
+  export const logoutAdmin = () => async (dispatch) => {
+    try {
+      dispatch({
+        type: "LogoutAdminRequest",
+      });
   
+      await axios.get("/api/v1/logout");
+  
+      dispatch({
+        type: "LogoutAdminSuccess",
+      });
+    } catch (error) {
+      dispatch({
+        type: "LogoutAdminFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+  export const getAllUsersForAdmin = () => async (dispatch) => {
+    try {
+      dispatch({
+        type: "allUsersForAdminRequest",
+      });
+
+      const { data } = await axios.get(`/api/v1/allUsersForAdmin`);
+      dispatch({
+        type: "allUsersForAdminSuccess",
+        payload: data.users,
+      });
+    } catch (error) {
+      dispatch({
+        type: "allUsersForAdminFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+
+  export const setUserProfile = (user) => async (dispatch) => {
+      dispatch({
+        type: "LoadUserSuccess",
+        payload: user,
+      }); 
+  };
+
+  export const deleteMyProfile = () => async (dispatch) => {
+    try {
+      dispatch({
+        type: "deleteProfileRequest",
+      });
+  
+      const { data } = await axios.delete("/api/v1/deleteUser/user");
+  
+      dispatch({
+        type: "deleteProfileSuccess",
+        payload: data.message,
+      });
+    } catch (error) {
+      dispatch({
+        type: "deleteProfileFailure",
+        payload: error.response.data.message,
+      });
+    }
+  };
+   
   

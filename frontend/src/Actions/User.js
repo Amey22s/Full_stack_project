@@ -372,3 +372,59 @@ export const loginUserAsTrader = (email, password) => async (dispatch) => {
     });
   }
 };
+
+// News actions
+
+export const updateSearchTerm = (searchTerm) => async (dispatch) => {
+
+  dispatch({
+  type: "updateSearchTerm",
+  payload: searchTerm,
+  });
+};
+
+export const setSearchResults = (searchResults) => async(dispatch) => {
+
+  console.log("in setsearchresults pre", searchResults);
+
+  dispatch({
+  type: "setSearchResult",
+  payload: searchResults,
+  });
+
+  console.log("in setsearchresults post");
+};
+
+export const selectArticle = (article) => async(dispatch) => {
+
+  dispatch({
+  type: "selectArticle",
+  payload: article,
+  });
+};
+
+export const fetchSearchResults = (searchTerm) => async(dispatch) => {
+
+  try {
+
+    console.log("NEWS api key is ",process.env.NEWS_API_KEY)
+    console.log("search term is ",searchTerm)
+
+
+  const {data} = await axios.get(`https://newsapi.org/v2/everything?q=${searchTerm}&apiKey=44f555cae8bf4b1bafddc4c071147f6f`);
+
+  console.log("Data from api is ",data);
+
+  await dispatch(setSearchResults(data.articles));
+
+
+  }
+  catch(error)
+  {
+    dispatch({
+      type: "newsFailure",
+      payload: error.response.data.message,
+    });
+  }
+};
+

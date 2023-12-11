@@ -15,7 +15,9 @@ import {
   StoreOutlined,
 
   Message,
-  MessageOutlined
+  MessageOutlined,
+  Newspaper,
+  NewspaperOutlined
 
 } from "@mui/icons-material";
 
@@ -56,6 +58,14 @@ const Header = () => {
           <Store style={{ color: "black" }} />
         ) : (
           <StoreOutlined />
+        )}
+      </Link>
+
+      <Link to="/news" onClick={() => setTab("/news")}>
+        {tab === "/news" ? (
+          <Newspaper style={{ color: "black" }} />
+        ) : (
+          <NewspaperOutlined />
         )}
       </Link>
 

@@ -6,7 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../Actions/User";
 import { useAlert } from "react-alert";
 
+
+import {traderLogin} from '../../Actions/Trader';
+
 import { adminLogin } from "../../Actions/Admin";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,11 +27,19 @@ const Login = () => {
     dispatch(loginUser(email, password));
   };
 
+
+  const traderLoginHandler = (e) => {
+    e.preventDefault();
+
+    dispatch(traderLogin(email,password));
+  } 
+
   const adminLoginHandler = (e) => {
     e.preventDefault();
 
     dispatch(adminLogin(email, password));
   };
+
 
   useEffect(() => {
     if (error) {
@@ -68,6 +80,13 @@ const Login = () => {
         </Link>
 
         <Button type="submit">Login</Button>
+        <Button onClick={traderLoginHandler}>
+          Login as Trader
+        </Button>
+
+        <Link to='/registerTrader'>
+          <Typography>New Trader?</Typography>
+        </Link>
 
         <Button onClick={adminLoginHandler}>
           Login as Admin
@@ -76,9 +95,11 @@ const Login = () => {
         <Link to="/register">
           <Typography>New User?</Typography>
         </Link>
+
         <Link to="/registerAdmin">
           <Typography>Admin Register</Typography>
         </Link>
+
       </form>
     </div>
   );

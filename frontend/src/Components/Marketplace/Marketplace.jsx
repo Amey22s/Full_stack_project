@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItemsOnSale, getMyItems, getApprovalRequests } from '../../Actions/Item'; // Make sure these actions are defined
-import './Marketplace.css'; // Your CSS for styling
+import { getItemsOnSale, getMyItems, getApprovalRequests } from '../../Actions/Item'; 
+import './Marketplace.css'; 
 
 const Marketplace = () => {
   const [activeTab, setActiveTab] = useState('itemsOnSale');

@@ -8,6 +8,7 @@ const initialState = {
 };
 
 export const traderReducer = createReducer(initialState, (builder) => {
+  console.log('inside trader reducer');
   builder
     .addCase('TraderLoginRequest', (state) => {
       state.loading = true;
@@ -16,6 +17,7 @@ export const traderReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.trader = action.payload;
       state.isAuthenticated = true;
+      state.isTrader = true;
     })
     .addCase('TraderLoginFailure', (state, action) => {
       state.loading = false;
@@ -36,6 +38,19 @@ export const traderReducer = createReducer(initialState, (builder) => {
       state.isAuthenticated = true;
     })
     .addCase('TraderRegisterFailure', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.isAuthenticated = false;
+    })
+    .addCase('TraderUserRequest', (state) => {
+      state.loading = true;
+    })
+    .addCase('TraderUserSuccess', (state, action) => {
+      state.loading = false;
+      state.trader = action.payload;
+      state.isAuthenticated = true;
+    })
+    .addCase('TraderUserFailure', (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.isAuthenticated = false;

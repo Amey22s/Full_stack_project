@@ -4,6 +4,24 @@ const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary');
 const bcrypt = require('bcrypt');
 
+exports.loadTrader = async (req, res) => {
+  try {
+    const trader = await Trader.findById(req.trader._id).populate(
+      'itemsSold itemsBought itemsInterested'
+    );
+
+    res.status(200).json({
+      success: true,
+      trader,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 exports.registerTrader = async (req, res) => {
   try {
     const { name, email, password, avatar } = req.body;
@@ -47,23 +65,53 @@ exports.registerTrader = async (req, res) => {
 exports.loginTrader = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const trader = await Trader.findOne({ email }).select('+password');
+    // Find the trader by email
+    const trader = await Trader.findOne({ email })
+      .select('+password')
+      .populate('itemsPosted itemsSold itemsBought itemsInterested');
+    console.log(trader, 'inside loginTrader');
+    // Check if trader exists
     if (!trader) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({
+        success: false,
+        message: 'Trader does not exist',
+      });
     }
 
-    const isMatch = await bcrypt.compare(password, trader.password);
+    // Check if password matches
+    const isMatch = await trader.matchPassword(password);
+    console.log(isMatch, 'is match');
+
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+      return res.status(400).json({
+        success: false,
+        message: 'Incorrect password',
+      });
     }
 
-    const token = jwt.sign({ id: trader._id }, process.env.JWT_SECRET);
-    res.status(200).json({ token });
+    // Generate token for the trader
+    const token = await trader.generateToken();
+    console.log(token, 'token');
+
+    const options = {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    };
+    console.log(options, 'options');
+
+    // Send response with token
+    res.status(200).cookie('token', token, options).json({
+      success: true,
+      trader,
+      token,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
-
 exports.logoutTrader = async (req, res) => {
   // The logout functionality generally depends on how you handle the authentication token.
   res.status(200).json({ message: 'Trader logged out successfully' });

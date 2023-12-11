@@ -36,9 +36,11 @@ const store = configureStore({
     allMessages: allMessagesReducer,
     myConversations: myConversationsReducer,
     newChat: newChatReducer,
+
     admin: adminReducer,
     allUsersForAdmin: allUsersForAdminReducer,
     news: newsReducer,
+
   },
 });
 

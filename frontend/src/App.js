@@ -22,7 +22,6 @@ import Marketplace from './Components/Marketplace/Marketplace';
 import NewItem from './Components/NewItem/NewItem';
 
 import Inbox from './Components/Inbox/Inbox';
-import Article from './Components/Article/Article';
 import News from './Components/News/News';
 
 import AdminRegister from './Components/AdminRegister/AdminRegister';

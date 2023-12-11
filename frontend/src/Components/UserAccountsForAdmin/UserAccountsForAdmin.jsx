@@ -110,12 +110,6 @@ const UserAccountForAdmin = () => {
           <Typography>{user.posts.length}</Typography>
         </div>
 
-        {/* <Button variant="contained" onClick={logoutHandler}>
-          Logout
-        </Button> */}
-
-        {/* <Link to="/update/profile">Edit Profile</Link>
-        <Link to="/update/password">Change Password</Link> */}
 
         <Button
           variant="text"
@@ -125,56 +119,6 @@ const UserAccountForAdmin = () => {
         >
           Delete My Profile
         </Button>
-
-        {/* <Dialog
-          open={followersToggle}
-          onClose={() => setFollowersToggle(!followersToggle)}
-        >
-          <div className="DialogBox">
-            <Typography variant="h4">Followers</Typography>
-
-            {user && user.followers.length > 0 ? (
-              user.followers.map((follower) => (
-                <User
-                  key={follower._id}
-                  userId={follower._id}
-                  name={follower.name}
-                  avatar={follower.avatar.url}
-                  source={"adminUsers"}
-                />
-              ))
-            ) : (
-              <Typography style={{ margin: "2vmax" }}>
-                You have no followers
-              </Typography>
-            )}
-          </div>
-        </Dialog>
-
-        <Dialog
-          open={followingToggle}
-          onClose={() => setFollowingToggle(!followingToggle)}
-        >
-          <div className="DialogBox">
-            <Typography variant="h4">Following</Typography>
-
-            {user && user.following.length > 0 ? (
-              user.following.map((follow) => (
-                <User
-                  key={follow._id}
-                  userId={follow._id}
-                  name={follow.name}
-                  avatar={follow.avatar.url}
-                  source={"adminUsers"}
-                />
-              ))
-            ) : (
-              <Typography style={{ margin: "2vmax" }}>
-                You're not following anyone
-              </Typography>
-            )}
-          </div>
-        </Dialog> */}
       </div>
     </div>
   );

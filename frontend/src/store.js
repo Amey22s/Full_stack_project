@@ -36,7 +36,7 @@ const store = configureStore({
     myConversations: myConversationsReducer,
     newChat: newChatReducer,
     admin:adminReducer,
-    allUsersForAdmin:allUsersForAdminReducer
+    allUsersForAdmin:allUsersForAdminReducer,
     news:newsReducer
   },
 });

@@ -43,10 +43,16 @@ exports.isAuthenticated = async (req, res, next) => {
     // Attempt to find user first
     req.user = await User.findById(decoded._id);
 
+    // console.log("User is auth is ",req.user)
+
     // If user not found, try to find admin
-    if ( typeof(req.user) === undefined) {
+    if ( req.user === null) {
       req.admin = await Admin.findById(decoded._id);
+
+    // console.log("Admin is auth is ",req.admin)
     }
+
+    // console.log("After user and admin")
 
     // Check if either user or admin exists
     if (!req.user && !req.admin) {

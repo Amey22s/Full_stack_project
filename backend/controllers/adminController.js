@@ -8,11 +8,11 @@ exports.adminLogin = async (req, res) => {
     try {
       const { email, password } = req.body;
 
-      // console.log("Email is ",email," password is ",password);
+      console.log("Email is ",email," password is ",password);
   
       const admin = await Admin.findOne({ email }).select("+password");
 
-      // console.log("Admin is ",admin);
+      console.log("Admin is ",admin);
 
   
       if (!admin) {
@@ -34,7 +34,7 @@ exports.adminLogin = async (req, res) => {
       console.log("before login in admin login")
       const token = await admin.generateToken();
 
-      // console.log("Token generated in adminlogin is ",token)
+      console.log("Token generated in adminlogin is ",token)
   
       console.log("token in admin login is ",token)
       const options = {

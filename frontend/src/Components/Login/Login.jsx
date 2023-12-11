@@ -3,7 +3,7 @@ import "./Login.css";
 import { Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../Actions/User";
+import { loginUser, guestLogin } from "../../Actions/User";
 import { useAlert } from "react-alert";
 
 import { adminLogin } from "../../Actions/Admin";
@@ -27,6 +27,10 @@ const Login = () => {
     e.preventDefault();
 
     dispatch(adminLogin(email, password));
+  };
+
+  const handleGuestLogin = () => {
+    dispatch(guestLogin());
   };
 
   useEffect(() => {
@@ -68,6 +72,10 @@ const Login = () => {
         </Link>
 
         <Button type="submit">Login</Button>
+
+        <Button onClick={handleGuestLogin}>
+          Login as Guest
+        </Button>
 
         <Button onClick={adminLoginHandler}>
           Login as Admin

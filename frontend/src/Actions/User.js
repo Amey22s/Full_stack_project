@@ -348,3 +348,11 @@ export const followAndUnfollowUser = (id) => async (dispatch) => {
     });
   }
 };
+
+export const guestLogin = () => async(dispatch) => {
+
+  dispatch({
+    type: "GUEST_LOGIN",
+  });
+};
+

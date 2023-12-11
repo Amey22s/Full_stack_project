@@ -25,7 +25,7 @@ import {AdminHome} from './Components/AdminHome/AdminHome';
 import AdminAccount from './Components/AdminAccounts/AdminAccount';
 import {AdminPosts} from './Components/AdminPosts/AdminPosts';
 import AdminUsers from './Components/AdminUsers/AdminUsers';
-import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
+//import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
 
 function App() {
@@ -33,28 +33,37 @@ function App() {
 
   const { isAdmin, isAuthenticated: adminAuth } = useSelector((state) => state.admin);
 
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, isGuest } = useSelector((state) => state.user);
 
   useEffect(() => {
 
     console.log("isAuthenticated = " + isAuthenticated);
     console.log("isAdmin = " + isAdmin);
     console.log("adminAuth = " + adminAuth);
+    console.log("is Guest = ", isGuest);
 
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());
-    } else if (isAuthenticated) {
+    } else if (isAuthenticated || isGuest) {
       dispatch(loadUser());
     }
-  }, [dispatch, isAuthenticated, isAdmin, adminAuth]);
+  }, [dispatch, isAuthenticated, isAdmin, adminAuth, isGuest]);
 
   //const { isAuthenticated } = useSelector((state) => state.user);
 
+  let headerComponent;
+  if (adminAuth && isAdmin) {
+    headerComponent = <AdminHeader />;
+  } else if (isAuthenticated && !isAdmin) {
+    headerComponent = <Header />;
+  }
+
   return (
     <Router>
-      {/* {isAuthenticated && <Header />} */}
+      {/* {isAuthenticated && <Header />}
       {adminAuth && isAdmin && <AdminHeader />}
-      {isAuthenticated && !isAdmin && <Header />}
+      {isAuthenticated && !isAdmin && <Header />} */}
+      {headerComponent}
 
       <Routes>
         {isAdmin && (
@@ -67,9 +76,9 @@ function App() {
           </>
         )}
 
-        {!isAdmin && (
+        {(!isAdmin) && (
           <>
-          <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
+          <Route path="/" element={isAuthenticated || isGuest ? <Home /> : <Login />} />
           <Route
             path="/account"
             element={isAuthenticated ? <Account /> : <Login />}
@@ -77,12 +86,12 @@ function App() {
   
           <Route
             path="/register"
-            element={isAuthenticated ? <Account /> : <Register />}
+            element={isAuthenticated || isGuest ? <Account /> : <Register />}
           />
   
           <Route
             path="/registerAdmin"
-            element={isAuthenticated ? <Account /> : <AdminRegister />}
+            element={isAuthenticated || isGuest ? <Account /> : <AdminRegister />}
           />
   
           <Route

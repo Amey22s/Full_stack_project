@@ -1,6 +1,17 @@
 import { createReducer } from "@reduxjs/toolkit";
-const initialState = {};
+const initialState = {
+  loading: false,
+  user: {},
+  //isAuthenticated: false,
+  isAdmin: false,
+  isGuest: false,
+};
 
+// const initialStateForGuest = {
+//   isAuthenticated: false,
+//   isAdmin: false,
+//   user: {},
+// };
 
 
 export const userReducer = createReducer(initialState, builder => {
@@ -49,6 +60,7 @@ export const userReducer = createReducer(initialState, builder => {
     state.loading = false;
     state.user = null;
     state.isAuthenticated = false;
+    state.isGuest = false;
   })
   builder.addCase("LogoutUserFailure", (state, action) => {
     state.loading = false;
@@ -58,6 +70,11 @@ export const userReducer = createReducer(initialState, builder => {
   builder.addCase("clearErrors", (state) => {
     state.error = null;
   })
+  builder.addCase("GUEST_LOGIN", (state) => {
+  state.isAuthenticated = true;
+  state.isGuest = true;
+  state.user = { name: "Guest User" };
+  });
 });
 
 export const postOfFollowingReducer = createReducer(initialState, builder => {
@@ -113,3 +130,13 @@ export const userProfileReducer = createReducer(initialState, builder => {
     state.error = null;
   })
 });
+
+// export const guestReducer = createReducer(initialState, builder => {
+
+//   builder.addCase("GUEST_LOGIN", (state) => {
+//     state.isAuthenticated = true;
+//     state.isGuest = true;
+//     state.user = { name: "Guest User" };
+//   });
+  
+// });

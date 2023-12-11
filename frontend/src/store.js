@@ -3,7 +3,7 @@ import {
   allUsersReducer,
   postOfFollowingReducer,
   userProfileReducer,
-  userReducer,
+  userReducer
 } from './Reducers/User';
 import { likeReducer, myPostsReducer, userPostsReducer } from './Reducers/Post';
 
@@ -26,7 +26,8 @@ const store = configureStore({
     myConversations: myConversationsReducer,
     newChat: newChatReducer,
     admin:adminReducer,
-    allUsersForAdmin:allUsersForAdminReducer
+    allUsersForAdmin:allUsersForAdminReducer,
+    //guest:guestReducer
 
   },
 });

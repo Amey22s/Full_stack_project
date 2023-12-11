@@ -31,13 +31,6 @@ import { AdminHome } from "./Components/AdminHome/AdminHome";
 import { AdminAccounts } from "./Components/AdminAccounts/AdminAccounts";
 import { AdminPosts } from "./Components/AdminPosts/AdminPosts";
 
-import AdminRegister from "./Components/AdminRegister/AdminRegister";
-import { loadAdmin } from "./Actions/Admin";
-import AdminHeader from "./Components/AdminHeader/AdminHeader";
-import { AdminHome } from "./Components/AdminHome/AdminHome";
-import { AdminAccounts } from "./Components/AdminAccounts/AdminAccounts";
-import { AdminPosts } from "./Components/AdminPosts/AdminPosts";
-
 import { loadTrader } from "./Actions/Trader";
 function App() {
   const dispatch = useDispatch();
@@ -96,14 +89,7 @@ function App() {
             />
           </>
         )}
-        {isTrader && (
-          <>
-            <Route
-              path="/registerTrader"
-              element={isAuthenticated ? <Marketplace /> : <Register />}
-            />
-          </>
-        )}
+
         {!isAdmin && (
           <>
             <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
@@ -117,6 +103,10 @@ function App() {
             <Route
               path="/register"
               element={isAuthenticated ? <Account /> : <Register />}
+            />
+            <Route
+              path="/registerTrader"
+              element={isAuthenticated ? <Marketplace /> : <Register />}
             />
 
             <Route

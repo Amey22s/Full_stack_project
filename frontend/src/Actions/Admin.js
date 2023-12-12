@@ -117,13 +117,13 @@ export const adminLogin = (email, password) => async (dispatch) => {
       }); 
   };
 
-  export const deleteMyProfile = () => async (dispatch) => {
+  export const deleteMyProfile = (id) => async (dispatch) => {
     try {
       dispatch({
         type: "deleteProfileRequest",
       });
   
-      const { data } = await axios.delete("/api/v1/deleteUser/user");
+      const { data } = await axios.delete(`/api/v1/deleteUser/${id}`);
   
       dispatch({
         type: "deleteProfileSuccess",

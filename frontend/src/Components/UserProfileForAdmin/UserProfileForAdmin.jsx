@@ -8,7 +8,7 @@ import {
   getUserPosts,
   getUserProfile
 } from "../../Actions/User";
-import { deleteMyProfile } from "../../Actions/Admin";
+import { deleteMyProfile, getAllUsersForAdmin } from "../../Actions/Admin";
 import Loader from "../Loader/Loader";
 import Post from "../Post/Post";
 import User from "../User/User";
@@ -87,8 +87,8 @@ const UserProfileForAdmin = () => {
   }, [alert, error, message, followError, userError, dispatch]);
 
   const deleteProfileHandler = async () => {
-    await dispatch(deleteMyProfile());
-    //dispatch(logoutUser());
+    await dispatch(deleteMyProfile(user._id));
+    dispatch(getAllUsersForAdmin());
   };
 
   return loading === true || userLoading === true ? (

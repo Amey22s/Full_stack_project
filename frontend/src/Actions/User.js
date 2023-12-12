@@ -212,13 +212,13 @@ export const updatePassword =
     }
   };
 
-export const deleteMyProfile = () => async (dispatch) => {
+export const deleteMyProfile = (id) => async (dispatch) => {
   try {
     dispatch({
       type: 'deleteProfileRequest',
     });
 
-    const { data } = await axios.delete('/api/v1/delete/me');
+    const { data } = await axios.delete(`/api/v1/delete/${id}`);
 
     dispatch({
       type: 'deleteProfileSuccess',

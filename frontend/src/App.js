@@ -29,7 +29,6 @@ import { loadAdmin } from './Actions/Admin';
 import AdminHeader from './Components/AdminHeader/AdminHeader';
 import { AdminHome } from './Components/AdminHome/AdminHome';
 import AdminAccount from './Components/AdminAccounts/AdminAccount';
-import { AdminPosts } from './Components/AdminPosts/AdminPosts';
 import AdminUsers from './Components/AdminUsers/AdminUsers';
 //import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
@@ -103,10 +102,6 @@ function App() {
             <Route
               path="/allUsers"
               element={adminAuth ? <AdminUsers /> : <Login />}
-            />
-            <Route
-              path="/allPosts"
-              element={adminAuth ? <AdminPosts /> : <Login />}
             />
             <Route
               path="/adminUsers/:id"

@@ -33,7 +33,7 @@ import { AdminPosts } from './Components/AdminPosts/AdminPosts';
 import AdminUsers from './Components/AdminUsers/AdminUsers';
 //import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
-
+import TraderHeader from './Components/TraderHeader/TraderHeader';
 import { loadTrader } from './Actions/Trader';
 
 function App() {
@@ -81,6 +81,8 @@ function App() {
     headerComponent = <AdminHeader />;
   } else if (isAuthenticated && !isAdmin) {
     headerComponent = <Header />;
+  } else if (traderAuth && isTrader) {
+    headerComponent = <TraderHeader />;
   }
 
   return (

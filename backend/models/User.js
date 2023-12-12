@@ -1,12 +1,12 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please enter a name"],
+    required: [true, 'Please enter a name'],
   },
 
   avatar: {
@@ -16,56 +16,56 @@ const userSchema = new mongoose.Schema({
 
   email: {
     type: String,
-    required: [true, "Please enter an email"],
-    unique: [true, "Email already exists"],
+    required: [true, 'Please enter an email'],
+    unique: [true, 'Email already exists'],
   },
   password: {
     type: String,
-    required: [true, "Please enter a password"],
-    minlength: [6, "Password must be at least 6 characters"],
+    required: [true, 'Please enter a password'],
+    minlength: [6, 'Password must be at least 6 characters'],
     select: false,
   },
 
   posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Post",
+      ref: 'Post',
     },
   ],
   followers: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
     },
   ],
 
   following: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
     },
   ],
 
   conversations: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    }
+      ref: 'User',
+    },
   ],
 
   messages: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Message"
-      }
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Message',
+    },
   ],
 
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 });
 
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
   }
 
@@ -73,6 +73,9 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.matchPassword = async function (password) {
+  console.log('inside match passsword user password received is', password);
+  console.log('this password is ', this.password);
+  console.log(bcrypt.compare(password, this.password));
   return await bcrypt.compare(password, this.password);
 };
 
@@ -81,15 +84,15 @@ userSchema.methods.generateToken = function () {
 };
 
 userSchema.methods.getResetPasswordToken = function () {
-  const resetToken = crypto.randomBytes(20).toString("hex");
+  const resetToken = crypto.randomBytes(20).toString('hex');
 
   this.resetPasswordToken = crypto
-    .createHash("sha256")
+    .createHash('sha256')
     .update(resetToken)
-    .digest("hex");
+    .digest('hex');
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

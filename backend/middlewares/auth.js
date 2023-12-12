@@ -1,6 +1,7 @@
-const User = require("../models/User");
-const jwt = require("jsonwebtoken");
-const Admin = require("../models/Admin");
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const Admin = require('../models/Admin');
+const Trader = require('../models/Trader');
 
 // exports.isAuthenticated = async (req, res, next) => {
 //   try {
@@ -31,10 +32,10 @@ exports.isAuthenticated = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     // console.log("Token is ",token);
-    if (typeof(token) === "undefined") {
-        res.status(401).json({
+    if (typeof token === 'undefined') {
+      res.status(401).json({
         success: false,
-        message: "Please login!",
+        message: 'Please login!',
       });
     }
 
@@ -46,19 +47,23 @@ exports.isAuthenticated = async (req, res, next) => {
     // console.log("User is auth is ",req.user)
 
     // If user not found, try to find admin
-    if ( req.user === null) {
+    if (req.user === null) {
       req.admin = await Admin.findById(decoded._id);
 
-    // console.log("Admin is auth is ",req.admin)
+      // console.log("Admin is auth is ",req.admin)
+    }
+
+    if (req.user === null && req.admin === null) {
+      req.trader = await Trader.findById(decoded._id);
     }
 
     // console.log("After user and admin")
 
     // Check if either user or admin exists
-    if (!req.user && !req.admin) {
+    if (!req.user && !req.admin && !req.trader) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized access!",
+        message: 'Unauthorized access!',
       });
     }
 
@@ -70,4 +75,3 @@ exports.isAuthenticated = async (req, res, next) => {
     });
   }
 };
-

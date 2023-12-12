@@ -50,6 +50,8 @@ const traderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
 });
 // Hash the password before saving the trader document
 traderSchema.pre('save', async function (next) {
@@ -59,9 +61,29 @@ traderSchema.pre('save', async function (next) {
   next();
 });
 
-// Method to compare provided password with the hashed password in the database
-traderSchema.methods.matchPassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+// traderSchema.pre('save', async function (next) {
+//   if (this.isModified('password')) {
+//     const salt = await bcrypt.genSalt(10);
+//     this.password = await bcrypt.hash(this.password, salt);
+//   }
+//   next();
+// });
+
+// // Method to compare provided password with the hashed password in the database
+// traderSchema.methods.matchPassword = async function (password) {
+//   console.log('inside match passsword trader password received is', password);
+//   console.log('this password is ', this.password);
+//   console.log(bcrypt.compare(password, this.password));
+//   return await bcrypt.compare(password, this.password);
+// };
+traderSchema.methods.matchPassword = async function (enteredPassword) {
+  console.log('Entered password:', enteredPassword);
+  console.log('Stored hashed password:', this.password);
+
+  const isMatch = await bcrypt.compare(enteredPassword, this.password);
+  console.log('Is match:', isMatch);
+
+  return isMatch;
 };
 
 // Method to generate a JWT token

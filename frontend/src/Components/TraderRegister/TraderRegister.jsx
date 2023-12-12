@@ -31,6 +31,7 @@ const RegisterTrader = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log("sending dispatch to registerTrader")
     dispatch(registerTrader(name, email, password, avatar));
   };
 

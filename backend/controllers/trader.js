@@ -30,19 +30,16 @@ exports.registerTrader = async (req, res) => {
       return res.status(400).json({ message: 'Trader already exists' });
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
     const myCloud = avatar
       ? await cloudinary.v2.uploader.upload(avatar, {
           folder: 'traders_avatars',
         })
       : null;
 
-    trader = new Trader({
+    trader = await Trader.create({
       name,
       email,
-      password: hashedPassword,
+      password,
       avatar: myCloud
         ? { public_id: myCloud.public_id, url: myCloud.secure_url }
         : undefined,
@@ -53,12 +50,23 @@ exports.registerTrader = async (req, res) => {
       itemsInterested: [],
     });
 
-    await trader.save();
+    const token = await trader.generateToken();
 
-    const token = jwt.sign({ id: trader._id }, process.env.JWT_SECRET);
-    res.status(201).json({ token });
+    //const token = jwt.sign({ id: trader._id }, process.env.JWT_SECRET);
+    const options = {
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    };
+    res.status(201).cookie('token', token, options).json({
+      success: true,
+      user,
+      token,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -79,6 +87,7 @@ exports.loginTrader = async (req, res) => {
     }
 
     // Check if password matches
+    console.log(password);
     const isMatch = await trader.matchPassword(password);
     console.log(isMatch, 'is match');
 
@@ -114,5 +123,18 @@ exports.loginTrader = async (req, res) => {
 };
 exports.logoutTrader = async (req, res) => {
   // The logout functionality generally depends on how you handle the authentication token.
-  res.status(200).json({ message: 'Trader logged out successfully' });
+  try {
+    res
+      .status(200)
+      .cookie('token', null, { expires: new Date(Date.now()), httpOnly: true })
+      .json({
+        success: true,
+        message: 'Logged out',
+      });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };

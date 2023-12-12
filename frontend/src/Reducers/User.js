@@ -1,17 +1,12 @@
 import { createReducer } from "@reduxjs/toolkit";
 const initialState = {
-  loading: false,
-  user: {},
-  //isAuthenticated: false,
-  isAdmin: false,
-  isGuest: false,
-};
+  // loading: false,
+  // user: {},
+  // //isAuthenticated: false,
+  // isAdmin: false,
+  // isGuest: false,
 
-// const initialStateForGuest = {
-//   isAuthenticated: false,
-//   isAdmin: false,
-//   user: {},
-// };
+};
 
 
 export const userReducer = createReducer(initialState, builder => {
@@ -131,12 +126,21 @@ export const userProfileReducer = createReducer(initialState, builder => {
   })
 });
 
-// export const guestReducer = createReducer(initialState, builder => {
 
-//   builder.addCase("GUEST_LOGIN", (state) => {
-//     state.isAuthenticated = true;
-//     state.isGuest = true;
-//     state.user = { name: "Guest User" };
-//   });
-  
-// });
+export const newsReducer = createReducer(initialState, builder => {
+  builder.addCase("updateSearchTerm", (state,action) => {
+    state.searchTerm = action.payload;
+  })
+  builder.addCase("setSearchResult", (state,action) => {
+    state.searchResults = action.payload;
+  })
+  builder.addCase("selectArticle", (state,action) => {
+    state.selectedArticle = action.payload;
+  })
+  builder.addCase("newsFailure", (state,action) => {
+    state.error = action.payload;
+  })
+  builder.addCase("clearErrors", (state) => {
+    state.error = null;
+  })
+})

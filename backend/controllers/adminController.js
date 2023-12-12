@@ -8,10 +8,12 @@ exports.adminLogin = async (req, res) => {
     try {
       const { email, password } = req.body;
 
-      console.log("email pwd in admin login is ",email," ",password)
+      console.log("Email is ",email," password is ",password);
+  
       const admin = await Admin.findOne({ email }).select("+password");
 
-      console.log("admin in admin login is ",admin)
+      console.log("Admin is ",admin);
+
   
       if (!admin) {
         return res.status(400).json({
@@ -31,12 +33,16 @@ exports.adminLogin = async (req, res) => {
   
       console.log("before login in admin login")
       const token = await admin.generateToken();
+
+      console.log("Token generated in adminlogin is ",token)
   
       console.log("token in admin login is ",token)
       const options = {
         expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
         httpOnly: true,
       };
+
+      // console.log("Before status 200");
   
       res.status(200).cookie("token", token, options).json({
         success: true,

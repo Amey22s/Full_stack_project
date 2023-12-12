@@ -1,4 +1,4 @@
-.search {
+ .news {
     height: 100vh;
     background-image: linear-gradient(to right, #fff5bc, #cec1ff);
   
@@ -9,10 +9,10 @@
     box-sizing: border-box;
   }
   
-  .searchForm {
+  .newsSearchForm {
     background-color: white;
     height: 100%;
-    width: 50%;
+    width: 70%;
     border-radius: 30px;
     box-sizing: border-box;
     padding: 2vmax;
@@ -21,7 +21,7 @@
     align-items: center;
   }
   
-  .searchForm > input {
+  .newsSearchForm > input {
     box-sizing: border-box;
     padding: 1vmax 2vmax;
     width: 80%;
@@ -32,7 +32,7 @@
     outline: none;
   }
   
-  .searchResults {
+  .newsSearchResults {
     width: 100%;
     height: 100%;
     overflow-y: auto;
@@ -42,14 +42,15 @@
   }
   
   @media screen and (max-width: 600px) {
-    .searchForm {
+    .newsSearchForm {
       width: 100%;
     }
   
-    .searchForm > input {
+    .newsSearchForm > input {
       padding: 4vw 8vw;
       margin: 2vmax;
       font: 100 1.2rem "Roboto", sans-serif;
       margin: 4vw;
     }
   }
+  

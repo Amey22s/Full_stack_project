@@ -30,7 +30,7 @@ const Admin = require("../models/Admin");
 exports.isAuthenticated = async (req, res, next) => {
   try {
     const { token } = req.cookies;
-    console.log("Token is ",token);
+    // console.log("Token is ",token);
     if (typeof(token) === "undefined") {
         res.status(401).json({
         success: false,
@@ -43,10 +43,16 @@ exports.isAuthenticated = async (req, res, next) => {
     // Attempt to find user first
     req.user = await User.findById(decoded._id);
 
+    // console.log("User is auth is ",req.user)
+
     // If user not found, try to find admin
-    if (!req.user) {
+    if ( req.user === null) {
       req.admin = await Admin.findById(decoded._id);
+
+    // console.log("Admin is auth is ",req.admin)
     }
+
+    // console.log("After user and admin")
 
     // Check if either user or admin exists
     if (!req.user && !req.admin) {

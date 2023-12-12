@@ -1,0 +1,49 @@
+.article {
+    width: 80%;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 0 1vmax 2vmax;
+    margin: 2vmax;
+  }
+  
+  .articleHeader {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 1vmax;
+  }
+  .articleHeader > button {
+    border-radius: 100%;
+    color: rgba(0, 0, 0, 0.582);
+  }
+  
+  .article > img {
+    width: 100%;
+  }
+  
+  .articleDetails {
+    padding: 1vmax;
+  }
+  
+  .articleDetails > a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    margin: 1vmax;
+  }
+
+
+  @media screen and (max-width: 600px) {
+    .article {
+      width: 70%;
+      border-radius: 0;
+      box-shadow: none;
+      border: 3px solid rgba(0, 0, 0, 0.068);
+      padding: 0 0 6vw;
+      margin: 0;
+    }
+  
+    .articleFooter > button > svg {
+      font-size: 8vw;
+    }
+  }

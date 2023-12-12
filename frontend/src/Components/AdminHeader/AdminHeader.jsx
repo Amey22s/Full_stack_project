@@ -6,8 +6,6 @@ import {
   HomeOutlined,
   AccountCircle,
   AccountCircleOutlined,
-  Image,
-  ImageOutlined,
   People,
   PeopleOutlined,
 } from "@mui/icons-material";
@@ -40,13 +38,6 @@ const AdminHeader = () => {
          )}
        </Link>
        
-      <Link to="/allPosts" onClick={() => setTab("/allPosts")}>
-        {tab === "/allPosts" ? (
-          <Image style={{ color: "black" }} />
-        ) : (
-          <ImageOutlined />
-        )}
-      </Link>
     </div>
   );
 };

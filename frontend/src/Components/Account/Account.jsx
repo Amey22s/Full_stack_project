@@ -30,7 +30,7 @@ const Account = () => {
   };
 
   const deleteProfileHandler = async () => {
-    await dispatch(deleteMyProfile());
+    await dispatch(deleteMyProfile(user._id));
     dispatch(logoutUser());
   };
 

@@ -15,6 +15,6 @@ router.route("/logoutAdmin").get(logoutAdmin);
 
 router.route("/allUsersForAdmin").get(isAuthenticated, getAllUsersForAdmin);
 
-router.route("/deleteUser/user").delete(isAuthenticated, deleteMyProfile);
+router.route("/deleteUser/:id").delete(isAuthenticated, deleteMyProfile);
 
 module.exports = router;

@@ -11,11 +11,21 @@ const User = ({ source, userId, name, avatar, user }) => {
 
   return (
   <div>
-    <Link onClick={() => setUserProfileHandler(user)} to={ (source === "adminUsers") ? `/adminUsers/${userId}` : ((source === "from inbox" ? `/inbox/${userId}` : `/user/${userId}` ))} className="homeUser">
+    {source === "adminUsers" ?  (<div>
+    <Link onClick={() => setUserProfileHandler(user)} to={ `/adminUsers/${userId}`} className="homeUser">
     <img src={avatar} alt={name} />
     <Typography>{name}</Typography>
   </Link>
+  </div>) : (
+    <div>
+  <Link to={(source === "from inbox") ? `/inbox/${userId}` : `/user/${userId}`} className="homeUser">
+      <img src={avatar} alt={name} />
+      <Typography>{name}</Typography>
+    </Link>
   </div>
+  )
+}
+</div>
   )
 };
 

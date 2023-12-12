@@ -349,6 +349,14 @@ export const followAndUnfollowUser = (id) => async (dispatch) => {
   }
 };
 
+export const guestLogin = () => async(dispatch) => {
+
+  dispatch({
+    type: "GUEST_LOGIN",
+  });
+};
+
+
 // actions/User.js
 
 export const loginUserAsTrader = (email, password) => async (dispatch) => {
@@ -428,4 +436,3 @@ export const fetchSearchResults = (searchTerm) => async(dispatch) => {
     });
   }
 };
-

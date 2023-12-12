@@ -17,7 +17,7 @@ exports.createItem = async (req, res) => {
         public_id: myCloud.public_id,
         url: myCloud.secure_url,
       },
-      owner: req.user._id,
+      owner: req.trader._id,
     });
 
     res.status(201).json({
@@ -43,14 +43,14 @@ exports.markInterest = async (req, res) => {
       });
     }
 
-    if (item.interestedBuyers.includes(req.user._id)) {
+    if (item.interestedBuyers.includes(req.trader._id)) {
       return res.status(400).json({
         success: false,
         message: 'You have already shown interest in this item',
       });
     }
 
-    item.interestedBuyers.push(req.user._id);
+    item.interestedBuyers.push(req.trader._id);
 
     await item.save();
 
@@ -77,7 +77,7 @@ exports.sellItem = async (req, res) => {
       });
     }
 
-    if (item.owner.toString() !== req.user._id.toString()) {
+    if (item.owner.toString() !== req.trader._id.toString()) {
       return res.status(401).json({
         success: false,
         message: 'Unauthorized',
@@ -111,10 +111,12 @@ exports.sellItem = async (req, res) => {
 // Get all items that are on sale (not posted by the current user)
 exports.getItemsOnSale = async (req, res) => {
   try {
+    console.log(req, 'request');
     const items = await Item.find({
-      owner: { $ne: req.user._id },
+      owner: { $ne: req.trader._id },
       status: 'available',
     });
+    console.log(items, 'inside itemsonsale controller');
     res.json({ success: true, items });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -124,7 +126,7 @@ exports.getItemsOnSale = async (req, res) => {
 // Get all items posted by the current user
 exports.getMyItems = async (req, res) => {
   try {
-    const items = await Item.find({ owner: req.user._id });
+    const items = await Item.find({ owner: req.trader._id });
     res.json({ success: true, items });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -135,7 +137,7 @@ exports.getMyItems = async (req, res) => {
 exports.getApprovalRequests = async (req, res) => {
   try {
     const items = await Item.find({
-      owner: req.user._id,
+      owner: req.trader._id,
       'interestedBuyers.0': { $exists: true },
     });
     res.json({ success: true, items });

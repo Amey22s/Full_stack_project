@@ -87,10 +87,9 @@ function App() {
 
   return (
     <Router>
-      {/* {isAuthenticated && <Header />}
-      {adminAuth && isAdmin && <AdminHeader />}
-      {isAuthenticated && !isAdmin && <Header />} */}
+
       {headerComponent}
+
 
       <Routes>
         {isAdmin && (
@@ -142,7 +141,7 @@ function App() {
             />
             <Route
               path="/registerTrader"
-              element={isAuthenticated ? <Marketplace /> : <Register />}
+              element={isAuthenticated ? <Marketplace /> : <RegisterTrader />}
             />
 
             <Route

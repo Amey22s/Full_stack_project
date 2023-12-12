@@ -32,7 +32,7 @@ import AdminAccount from './Components/AdminAccounts/AdminAccount';
 import AdminUsers from './Components/AdminUsers/AdminUsers';
 //import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
-
+import TraderHeader from './Components/TraderHeader/TraderHeader';
 import { loadTrader } from './Actions/Trader';
 
 function App() {
@@ -58,13 +58,11 @@ function App() {
   }, [state.searchResults]);
 
   useEffect(() => {
-
-
     // console.log("isAuthenticated = " + isAuthenticated);
     // console.log("isAdmin = " + isAdmin);
     // console.log("adminAuth = " + adminAuth);
 
-    console.log("is Guest = ", isGuest);
+    console.log('is Guest = ', isGuest);
 
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());
@@ -82,13 +80,13 @@ function App() {
     headerComponent = <AdminHeader />;
   } else if (isAuthenticated && !isAdmin) {
     headerComponent = <Header />;
+  } else if (traderAuth && isTrader) {
+    headerComponent = <TraderHeader />;
   }
 
   return (
     <Router>
-
       {headerComponent}
-
 
       <Routes>
         {isAdmin && (
@@ -109,7 +107,7 @@ function App() {
           </>
         )}
 
-        {(!isAdmin) && (
+        {!isAdmin && (
           <>
             <Route
               path="/"

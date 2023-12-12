@@ -53,13 +53,7 @@ const Header = () => {
           <SearchOutlined />
         )}
       </Link>
-      <Link to="/marketplace" onClick={() => setTab("/marketplace")}>
-        {tab === "/marketplace" ? (
-          <Store style={{ color: "black" }} />
-        ) : (
-          <StoreOutlined />
-        )}
-      </Link>
+    
 
       <Link to="/news" onClick={() => setTab("/news")}>
         {tab === "/news" ? (
@@ -78,13 +72,7 @@ const Header = () => {
       </Link>
 
 
-      <Link to="/newitem" onClick={() => setTab("/newitem")}>
-        {tab === "/newitem" ? (
-          <Add style={{ color: "black" }} />
-        ) : (
-          <AddOutlined />
-        )}
-      </Link>
+
 
       
 

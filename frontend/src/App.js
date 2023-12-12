@@ -31,7 +31,7 @@ import { AdminHome } from './Components/AdminHome/AdminHome';
 import AdminAccount from './Components/AdminAccounts/AdminAccount';
 import { AdminPosts } from './Components/AdminPosts/AdminPosts';
 import AdminUsers from './Components/AdminUsers/AdminUsers';
-import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
+//import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
 
 import { loadTrader } from './Actions/Trader';
@@ -51,7 +51,7 @@ function App() {
     (state) => state.trader
   );
 
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, isGuest } = useSelector((state) => state.user);
 
   useEffect(() => {
     console.log('Search results is ', state.searchResults);
@@ -59,27 +59,33 @@ function App() {
   }, [state.searchResults]);
 
   useEffect(() => {
-    console.log('isAuthenticated = ' + isAuthenticated);
-    console.log('isAdmin = ' + isAdmin);
-    console.log('adminAuth = ' + adminAuth);
+    // console.log("isAuthenticated = " + isAuthenticated);
+    // console.log("isAdmin = " + isAdmin);
+    // console.log("adminAuth = " + adminAuth);
+
+    console.log('is Guest = ', isGuest);
 
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());
     } else if (traderAuth && isTrader) {
       dispatch(loadTrader());
-    } else if (isAuthenticated) {
+    } else if (isAuthenticated || isGuest) {
       dispatch(loadUser());
     }
-  }, [dispatch, isAuthenticated, isAdmin, adminAuth]);
+  }, [dispatch, isAuthenticated, isAdmin, adminAuth, isGuest]);
 
   //const { isAuthenticated } = useSelector((state) => state.user);
 
+  let headerComponent;
+  if (adminAuth && isAdmin) {
+    headerComponent = <AdminHeader />;
+  } else if (isAuthenticated && !isAdmin) {
+    headerComponent = <Header />;
+  }
+
   return (
     <Router>
-      {/* {isAuthenticated && <Header />} */}
-      {adminAuth && isAdmin && <AdminHeader />}
-      {isAuthenticated && !isAdmin && <Header />}
-      {traderAuth && isTrader && <Header />}
+      {headerComponent}
 
       <Routes>
         {isAdmin && (

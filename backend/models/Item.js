@@ -15,7 +15,7 @@ const itemSchema = new mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Trader',
     required: true,
   },
   status: {
@@ -26,12 +26,12 @@ const itemSchema = new mongoose.Schema({
   interestedBuyers: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'Trader',
     },
   ],
   soldTo: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Trader',
     default: null,
   },
   createdAt: {

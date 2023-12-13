@@ -39,47 +39,59 @@ const Marketplace = () => {
       {activeTab === 'itemsOnSale' && (
         <div className="itemsList">
           {itemsOnSale.map(item => (
-            <div key={item._id} className="item">
+            <div key={item._id} className="itemCard">
               <img src={item.image.url} alt={item.caption} />
+              <div className='itemDetails'>
               <h3>{item.caption}</h3>
               <p>Price: ${item.price}</p>
               <Button onClick={()=> handleMarkInterest(item._id)}>Mark Interest</Button>
+              
+              </div>
               {/* Add more item details and actions here */}
             </div>
           ))}
         </div>
       )}
 
-      {activeTab === 'myItems' && (
-        <div className="itemsList">
-          {myItems.map(item => (
-            <div key={item._id} className="item">
-              <img src={item.image.url} alt={item.caption} />
-              <h3>{item.caption}</h3>
-              <p>Price: ${item.price}</p>
-              {item.interestedBuyers && (
-          <p>Interested Buyers: {item.interestedBuyers.length}</p>
-        )}
-              {/* Add more item details and actions here */}
-            </div>
-          ))}
+{activeTab === 'myItems' && (
+  <div className="itemsList">
+    {myItems.map(item => (
+      <div key={item._id} className="itemCard">
+        <div className="itemImage">
+          <img src={item.image.url} alt={item.caption} />
         </div>
-      )}
+        <div className="itemDetails">
+          <h3>{item.caption}</h3>
+          <p>Price: ${item.price}</p>
+          {item.interestedBuyers && (
+            <p>Interested Buyers: {item.interestedBuyers.length}</p>
+          )}
+          {/* Add more item details and actions here */}
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
 
       {activeTab === 'approvalRequests' && (
-        <div className="itemsList">
+        <div className="approvalList">
           {approvalRequests.map(item => (
-            <div key={item._id} className="item">
-              <img src={item.image.url} alt={item.caption} />
-              <h3>{item.caption}</h3>
-              <p>Interested Buyers: {item.interestedBuyers.length}</p>
+            <div key={item._id} className="approvalCard">
+              <div className='approvalDetails'><h3 className='itemTitle'>{item.caption}</h3>
+              <p className='buyerCount'>Interested Buyers: {item.interestedBuyers.length}</p>
               {item.interestedBuyers.map(buyer =>(
-                <div key={buyer._id}>
-                  <span>{buyer.name}</span>
-                  <button onClick={() => handleApprove(item._id, buyer._id)}>Approve</button>
-                <button onClick={() => handleDecline(item._id, buyer._id)}>Decline</button>
+                <div key={buyer._id} className="buyerInfo">
+                  <span className='buyerName'>{buyer.name}</span>
+                  <button onClick={() => handleApprove(item._id, buyer._id)} className="approveBtn">Approve</button>
+                <button onClick={() => handleDecline(item._id, buyer._id)} className="declineBtn">Decline</button>
                 </div>
               ))}
+              
+              </div>
+              
+              
+              
               {/* Implement functionality to approve sale */}
               {/* For each interested buyer, you can add a button or link to approve the sale */}
             </div>

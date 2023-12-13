@@ -79,19 +79,12 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Link to="/forgot/password">
-          <Typography>Forgot Password?</Typography>
-        </Link>
+        
 
         <Button type="submit">Login</Button>
         <Button onClick={traderLoginHandler}>
           Login as Trader
         </Button>
-
-        <Link to='/registerTrader'>
-          <Typography>New Trader?</Typography>
-        </Link>
-
         <Button onClick={handleGuestLogin}>
           Login as Guest
         </Button>
@@ -99,6 +92,12 @@ const Login = () => {
         <Button onClick={adminLoginHandler}>
           Login as Admin
         </Button>
+        <Link to="/forgot/password">
+          <Typography>Forgot Password?</Typography>
+        </Link>
+        <Link to='/registerTrader'>
+          <Typography>New Trader?</Typography>
+        </Link>
 
         <Link to="/register">
           <Typography>New User?</Typography>

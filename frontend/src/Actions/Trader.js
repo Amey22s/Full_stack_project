@@ -74,11 +74,48 @@ export const loadTrader = () => async (dispatch) => {
 
     dispatch({
       type: 'LoadTraderSuccess',
-      payload: data.user,
+      payload: data.trader,
     });
   } catch (error) {
     dispatch({
       type: 'LoadTraderFailure',
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const logoutTrader = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'LogoutTraderRequest',
+    });
+
+    await axios.get('/api/trader/logout');
+
+    dispatch({
+      type: 'TraderLogoutSuccess',
+    });
+  } catch (error) {
+    dispatch({
+      type: 'LogoutTraderFailure',
+      payload: error.response.data.message,
+    });
+  }
+};
+export const getTraderProfile = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'TraderProfileRequest',
+    });
+    console.log(id, 'id in get trader action');
+    const { data } = await axios.get(`/api/trader/${id}`);
+    dispatch({
+      type: 'TraderProfileSuccess',
+      payload: data.trader,
+    });
+  } catch (error) {
+    dispatch({
+      type: 'TraderProfileFailure',
       payload: error.response.data.message,
     });
   }

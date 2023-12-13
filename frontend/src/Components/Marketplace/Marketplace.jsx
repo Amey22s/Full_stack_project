@@ -1,13 +1,22 @@
+import { Button } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItemsOnSale, getMyItems, getApprovalRequests } from '../../Actions/Item'; 
+import { getItemsOnSale, getMyItems, getApprovalRequests, markInterest, approveSale, declineSale } from '../../Actions/Item'; 
 import './Marketplace.css'; 
 
 const Marketplace = () => {
   const [activeTab, setActiveTab] = useState('itemsOnSale');
+const [activeSubTab, setActiveSubTab] = useState('selling');
   const dispatch = useDispatch();
   const { itemsOnSale, myItems, approvalRequests, loading, error } = useSelector(state => state.item);
+  const traderProfile = useSelector(state => state.trader);
+console.log("trader profile", traderProfile)
+  // Check if itemsBought is defined and is an array
+  const itemsBought = traderProfile && Array.isArray(traderProfile.itemsBought)
+    ? traderProfile.itemsBought
+    : [];
 
+    console.log("Items bought", itemsBought)
   useEffect(() => {
     dispatch(getItemsOnSale());
     dispatch(getMyItems());
@@ -17,6 +26,16 @@ const Marketplace = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+  const handleMarkInterest = (itemId) =>{
+    dispatch(markInterest(itemId));
+  }
+  const handleApprove = (itemId, buyerId) => {
+    dispatch(approveSale(itemId, buyerId));
+  }
+
+  const handleDecline = (itemId, buyerId) => {
+    dispatch(declineSale(itemId, buyerId));
+  }
   return (
     <div className="marketplace">
       <div className="tabs">
@@ -27,37 +46,86 @@ const Marketplace = () => {
 
       {activeTab === 'itemsOnSale' && (
         <div className="itemsList">
-          {itemsOnSale.map(item => (
-            <div key={item._id} className="item">
+          {itemsOnSale.filter(item => item.status === 'available').map(item => (
+            <div key={item._id} className="itemCard">
               <img src={item.image.url} alt={item.caption} />
+              <div className='itemDetails'>
               <h3>{item.caption}</h3>
               <p>Price: ${item.price}</p>
+              <Button onClick={()=> handleMarkInterest(item._id)}>Mark Interest</Button>
+              
+              </div>
               {/* Add more item details and actions here */}
             </div>
           ))}
         </div>
       )}
 
-      {activeTab === 'myItems' && (
-        <div className="itemsList">
-          {myItems.map(item => (
-            <div key={item._id} className="item">
-              <img src={item.image.url} alt={item.caption} />
-              <h3>{item.caption}</h3>
-              <p>Price: ${item.price}</p>
-              {/* Add more item details and actions here */}
-            </div>
-          ))}
+{activeTab === 'myItems' && (
+  <div>
+    <div className="tabs">
+      <button onClick={() => setActiveSubTab('selling')}>Selling</button>
+      <button onClick={() => setActiveSubTab('bought')}>Bought</button>
+    </div>
+
+    <div className="itemsList">
+      {activeSubTab === 'selling' && myItems.map(item => (
+        <div key={item._id} className="itemCard">
+          <div className="itemImage">
+            <img src={item.image.url} alt={item.caption} />
+          </div>
+          <div className="itemDetails">
+            <h3>{item.caption}</h3>
+            <p>Price: ${item.price}</p>
+            <p>Status: {item.status}</p>
+            {item.status === 'available' && item.interestedBuyers && (
+          <p>Interested Buyers: {item.interestedBuyers.length}</p>
+        )}
+         {item.status === 'sold' && item.soldTo && (
+          // Render the name of the buyer. You need to fetch the buyer's details based on item.soldTo
+          <p>Sold to: {item.soldTo.name}</p>
+        )}
+
+            {/* Add more item details and actions here */}
+          </div>
         </div>
-      )}
+      ))}
+      {activeSubTab === 'bought' && itemsBought.map(item => (
+        <div key={item._id} className="itemCard">
+          <div className="itemImage">
+            <img src={item.image.url} alt={item.caption} />
+          </div>
+          <div className="itemDetails">
+            <h3>{item.caption}</h3>
+            <p>Price: ${item.price}</p>
+            {/* Add more details if needed */}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
 
       {activeTab === 'approvalRequests' && (
-        <div className="itemsList">
+        <div className="approvalList">
           {approvalRequests.map(item => (
-            <div key={item._id} className="item">
-              <img src={item.image.url} alt={item.caption} />
-              <h3>{item.caption}</h3>
-              <p>Interested Buyers: {item.interestedBuyers.length}</p>
+            <div key={item._id} className="approvalCard">
+              <div className='approvalDetails'><h3 className='itemTitle'>{item.caption}</h3>
+              <p className='buyerCount'>Interested Buyers: {item.interestedBuyers.length}</p>
+              {item.interestedBuyers.map(buyer =>(
+                <div key={buyer._id} className="buyerInfo">
+                  <span className='buyerName'>{buyer.name}</span>
+                  <button onClick={() => handleApprove(item._id, buyer._id)} className="approveBtn">Approve</button>
+                <button onClick={() => handleDecline(item._id, buyer._id)} className="declineBtn">Decline</button>
+                </div>
+              ))}
+              
+              </div>
+              
+              
+              
               {/* Implement functionality to approve sale */}
               {/* For each interested buyer, you can add a button or link to approve the sale */}
             </div>

@@ -34,6 +34,7 @@ import AdminUsers from './Components/AdminUsers/AdminUsers';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
 import TraderHeader from './Components/TraderHeader/TraderHeader';
 import { loadTrader } from './Actions/Trader';
+import TraderAccount from './Components/TraderAccount/TraderAccount';
 
 function App() {
   const dispatch = useDispatch();
@@ -71,7 +72,15 @@ function App() {
     } else if (isAuthenticated || isGuest) {
       dispatch(loadUser());
     }
-  }, [dispatch, isAuthenticated, isAdmin, adminAuth, isGuest]);
+  }, [
+    dispatch,
+    isAuthenticated,
+    isAdmin,
+    adminAuth,
+    isGuest,
+    traderAuth,
+    isTrader,
+  ]);
 
   //const { isAuthenticated } = useSelector((state) => state.user);
 
@@ -121,9 +130,18 @@ function App() {
                 )
               }
             />
+
             <Route
               path="/account"
-              element={isAuthenticated ? <Account /> : <Login />}
+              element={
+                isAuthenticated ? (
+                  <Account />
+                ) : traderAuth ? (
+                  <TraderAccount />
+                ) : (
+                  <Login />
+                )
+              }
             />
 
             <Route path="/news" element={<News />} />
@@ -134,7 +152,7 @@ function App() {
             />
             <Route
               path="/registerTrader"
-              element={isAuthenticated ? <Marketplace /> : <RegisterTrader />}
+              element={traderAuth ? <Marketplace /> : <RegisterTrader />}
             />
 
             <Route
@@ -144,10 +162,13 @@ function App() {
 
             <Route
               path="/marketplace"
-              element={isAuthenticated ? <Marketplace /> : <Login />}
+              element={traderAuth ? <Marketplace /> : <Login />}
             />
 
-            <Route path="/newitem" element={<NewItem />} />
+            <Route
+              path="/newitem"
+              element={traderAuth ? <NewItem /> : <Login />}
+            />
 
             <Route
               path="/newpost"

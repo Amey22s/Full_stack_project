@@ -24,7 +24,16 @@ export const traderReducer = createReducer(initialState, (builder) => {
       state.error = action.payload;
       state.isAuthenticated = false;
     })
+    .addCase('LogoutTraderRequest', (state) => {
+      state.loading = true;
+    })
+    .addCase('LogoutTraderFailure', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.isAuthenticated = false;
+    })
     .addCase('TraderLogoutSuccess', (state) => {
+      state.loading = false;
       state.trader = null;
       state.isAuthenticated = false;
     })

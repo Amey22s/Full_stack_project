@@ -83,3 +83,22 @@ export const loadTrader = () => async (dispatch) => {
     });
   }
 };
+
+export const logoutTrader = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'LogoutTraderRequest',
+    });
+
+    await axios.get('/api/trader/logout');
+
+    dispatch({
+      type: 'TraderLogoutSuccess',
+    });
+  } catch (error) {
+    dispatch({
+      type: 'LogoutTraderFailure',
+      payload: error.response.data.message,
+    });
+  }
+};

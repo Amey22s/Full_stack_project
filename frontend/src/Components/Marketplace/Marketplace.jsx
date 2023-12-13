@@ -78,9 +78,14 @@ console.log("trader profile", traderProfile)
             <h3>{item.caption}</h3>
             <p>Price: ${item.price}</p>
             <p>Status: {item.status}</p>
-            {item.interestedBuyers && (
-              <p>Interested Buyers: {item.interestedBuyers.length}</p>
-            )}
+            {item.status === 'available' && item.interestedBuyers && (
+          <p>Interested Buyers: {item.interestedBuyers.length}</p>
+        )}
+         {item.status === 'sold' && item.soldTo && (
+          // Render the name of the buyer. You need to fetch the buyer's details based on item.soldTo
+          <p>Sold to: {item.soldTo.name}</p>
+        )}
+
             {/* Add more item details and actions here */}
           </div>
         </div>

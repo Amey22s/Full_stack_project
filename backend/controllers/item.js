@@ -19,7 +19,12 @@ exports.createItem = async (req, res) => {
       },
       owner: req.trader._id,
     });
-
+    // Find the trader and add the newly created item's ID to itemsPosted
+    const trader = await Trader.findById(req.trader._id);
+    if (trader) {
+      trader.itemsPosted.push(newItem._id);
+      await trader.save();
+    }
     res.status(201).json({
       success: true,
       item: newItem,
@@ -179,9 +184,11 @@ exports.getItemsOnSale = async (req, res) => {
 // Get all items posted by the current user
 exports.getMyItems = async (req, res) => {
   try {
-    const items = await Item.find({ owner: req.trader._id }).sort({
-      createdAt: -1,
-    });
+    const items = await Item.find({ owner: req.trader._id })
+      .populate('soldTo', 'name')
+      .sort({
+        createdAt: -1,
+      });
     res.json({ success: true, items });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

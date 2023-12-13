@@ -8,7 +8,7 @@ import {
 } from './Reducers/User';
 import { likeReducer, myPostsReducer, userPostsReducer } from './Reducers/Post';
 
-import { traderReducer } from './Reducers/Trader';
+import { TraderProfileReducer, traderReducer } from './Reducers/Trader';
 import { itemReducer } from './Reducers/Item';
 
 import {
@@ -37,10 +37,10 @@ const store = configureStore({
     myConversations: myConversationsReducer,
     newChat: newChatReducer,
 
-
     admin: adminReducer,
     allUsersForAdmin: allUsersForAdminReducer,
     news: newsReducer,
+    traderProfile: TraderProfileReducer,
   },
 });
 

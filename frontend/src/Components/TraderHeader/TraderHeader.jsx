@@ -25,11 +25,15 @@ const TraderHeader = () => {
   const [tab, setTab] = useState(window.location.pathname);
   return (
     <div className="header">
-      <Link to="/" onClick={() => setTab("/")}>
-        {tab === "/" ? <Home style={{ color: "black" }} /> : <HomeOutlined />}
-      </Link>
-
       
+
+      <Link to="/marketplace" onClick={() => setTab("/marketplace")}>
+        {tab === "/marketplace" ? (
+          <Store style={{ color: "black" }} />
+        ) : (
+          <StoreOutlined />
+        )}
+      </Link>
 
       <Link to="/newitem" onClick={() => setTab("/newitem")}>
         {tab === "/newitem" ? (
@@ -39,13 +43,7 @@ const TraderHeader = () => {
         )}
       </Link>
       
-      <Link to="/marketplace" onClick={() => setTab("/marketplace")}>
-        {tab === "/marketplace" ? (
-          <Store style={{ color: "black" }} />
-        ) : (
-          <StoreOutlined />
-        )}
-      </Link>
+     
 
   
 

@@ -34,7 +34,8 @@ import AdminUsers from './Components/AdminUsers/AdminUsers';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
 import TraderHeader from './Components/TraderHeader/TraderHeader';
 import { loadTrader } from './Actions/Trader';
-import TraderAccount from './Components/TraderAccount/TraderAccount';
+
+import TraderProfile from './Components/TraderProfile/Traderprofile';
 
 function App() {
   const dispatch = useDispatch();
@@ -137,7 +138,7 @@ function App() {
                 isAuthenticated ? (
                   <Account />
                 ) : traderAuth ? (
-                  <TraderAccount />
+                  <TraderProfile />
                 ) : (
                   <Login />
                 )

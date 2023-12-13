@@ -86,6 +86,9 @@ export const itemReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.message = action.payload.message;
       // Update item status to 'sold' and set soldTo
+      state.approvalRequests = state.approvalRequests.filter(
+        (request) => request._id !== action.payload.requestId
+      );
       state.myItems = state.myItems.map((item) =>
         item._id === action.payload.itemId
           ? { ...item, status: 'sold', soldTo: action.payload.buyerId }
@@ -104,6 +107,9 @@ export const itemReducer = createReducer(initialState, (builder) => {
     .addCase('DeclineSaleSuccess', (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
+      state.approvalRequests = state.approvalRequests.filter(
+        (request) => request._id !== action.payload.requestId
+      );
       // Remove buyerId from interestedBuyers array
       state.myItems = state.myItems.map((item) =>
         item._id === action.payload.itemId

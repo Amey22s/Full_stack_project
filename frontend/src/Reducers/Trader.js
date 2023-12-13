@@ -10,6 +10,18 @@ const initialState = {
 export const traderReducer = createReducer(initialState, (builder) => {
   console.log('inside trader reducer');
   builder
+    .addCase('LoadTraderRequest', (state) => {
+      state.loading = true;
+    })
+    .addCase('LoadTraderSuccess', (state, action) => {
+      state.loading = false;
+      state.trader = action.payload; // This should include itemsBought and other details
+      state.isAuthenticated = true; // Assuming successful load implies authentication
+    })
+    .addCase('LoadTraderFailure', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
     .addCase('TraderLoginRequest', (state) => {
       state.loading = true;
     })

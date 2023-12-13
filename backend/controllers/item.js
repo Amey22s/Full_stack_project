@@ -113,7 +113,15 @@ exports.sellItem = async (req, res) => {
     item.soldTo = buyerId;
 
     await item.save();
+    // Update seller (owner)
+    const seller = await Trader.findById(req.trader._id);
+    seller.itemsSold.push(id);
+    await seller.save();
 
+    // Update buyer
+    const buyer = await Trader.findById(buyerId);
+    buyer.itemsBought.push(id);
+    await buyer.save();
     res.status(200).json({
       success: true,
       message: 'Item sold',
@@ -160,7 +168,7 @@ exports.getItemsOnSale = async (req, res) => {
     const items = await Item.find({
       owner: { $ne: req.trader._id },
       status: 'available',
-    });
+    }).sort({ createdAt: -1 });
     console.log(items, 'inside itemsonsale controller');
     res.json({ success: true, items });
   } catch (error) {
@@ -171,7 +179,9 @@ exports.getItemsOnSale = async (req, res) => {
 // Get all items posted by the current user
 exports.getMyItems = async (req, res) => {
   try {
-    const items = await Item.find({ owner: req.trader._id });
+    const items = await Item.find({ owner: req.trader._id }).sort({
+      createdAt: -1,
+    });
     res.json({ success: true, items });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

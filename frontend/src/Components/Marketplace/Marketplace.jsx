@@ -6,9 +6,17 @@ import './Marketplace.css';
 
 const Marketplace = () => {
   const [activeTab, setActiveTab] = useState('itemsOnSale');
+const [activeSubTab, setActiveSubTab] = useState('selling');
   const dispatch = useDispatch();
   const { itemsOnSale, myItems, approvalRequests, loading, error } = useSelector(state => state.item);
+  const traderProfile = useSelector(state => state.trader);
+console.log("trader profile", traderProfile)
+  // Check if itemsBought is defined and is an array
+  const itemsBought = traderProfile && Array.isArray(traderProfile.itemsBought)
+    ? traderProfile.itemsBought
+    : [];
 
+    console.log("Items bought", itemsBought)
   useEffect(() => {
     dispatch(getItemsOnSale());
     dispatch(getMyItems());
@@ -38,7 +46,7 @@ const Marketplace = () => {
 
       {activeTab === 'itemsOnSale' && (
         <div className="itemsList">
-          {itemsOnSale.map(item => (
+          {itemsOnSale.filter(item => item.status === 'available').map(item => (
             <div key={item._id} className="itemCard">
               <img src={item.image.url} alt={item.caption} />
               <div className='itemDetails'>
@@ -54,24 +62,45 @@ const Marketplace = () => {
       )}
 
 {activeTab === 'myItems' && (
-  <div className="itemsList">
-    {myItems.map(item => (
-      <div key={item._id} className="itemCard">
-        <div className="itemImage">
-          <img src={item.image.url} alt={item.caption} />
+  <div>
+    <div className="tabs">
+      <button onClick={() => setActiveSubTab('selling')}>Selling</button>
+      <button onClick={() => setActiveSubTab('bought')}>Bought</button>
+    </div>
+
+    <div className="itemsList">
+      {activeSubTab === 'selling' && myItems.map(item => (
+        <div key={item._id} className="itemCard">
+          <div className="itemImage">
+            <img src={item.image.url} alt={item.caption} />
+          </div>
+          <div className="itemDetails">
+            <h3>{item.caption}</h3>
+            <p>Price: ${item.price}</p>
+            <p>Status: {item.status}</p>
+            {item.interestedBuyers && (
+              <p>Interested Buyers: {item.interestedBuyers.length}</p>
+            )}
+            {/* Add more item details and actions here */}
+          </div>
         </div>
-        <div className="itemDetails">
-          <h3>{item.caption}</h3>
-          <p>Price: ${item.price}</p>
-          {item.interestedBuyers && (
-            <p>Interested Buyers: {item.interestedBuyers.length}</p>
-          )}
-          {/* Add more item details and actions here */}
+      ))}
+      {activeSubTab === 'bought' && itemsBought.map(item => (
+        <div key={item._id} className="itemCard">
+          <div className="itemImage">
+            <img src={item.image.url} alt={item.caption} />
+          </div>
+          <div className="itemDetails">
+            <h3>{item.caption}</h3>
+            <p>Price: ${item.price}</p>
+            {/* Add more details if needed */}
+          </div>
         </div>
-      </div>
-    ))}
+      ))}
+    </div>
   </div>
 )}
+
 
 
       {activeTab === 'approvalRequests' && (

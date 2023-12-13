@@ -74,7 +74,7 @@ export const loadTrader = () => async (dispatch) => {
 
     dispatch({
       type: 'LoadTraderSuccess',
-      payload: data.user,
+      payload: data.trader,
     });
   } catch (error) {
     dispatch({

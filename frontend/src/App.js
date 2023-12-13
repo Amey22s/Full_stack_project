@@ -32,8 +32,9 @@ import AdminAccount from './Components/AdminAccounts/AdminAccount';
 import AdminUsers from './Components/AdminUsers/AdminUsers';
 //import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
-
+import TraderHeader from './Components/TraderHeader/TraderHeader';
 import { loadTrader } from './Actions/Trader';
+import TraderAccount from './Components/TraderAccount/TraderAccount';
 
 function App() {
   const dispatch = useDispatch();
@@ -58,13 +59,11 @@ function App() {
   }, [state.searchResults]);
 
   useEffect(() => {
-
-
     // console.log("isAuthenticated = " + isAuthenticated);
     // console.log("isAdmin = " + isAdmin);
     // console.log("adminAuth = " + adminAuth);
 
-    console.log("is Guest = ", isGuest);
+    console.log('is Guest = ', isGuest);
 
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());
@@ -73,7 +72,15 @@ function App() {
     } else if (isAuthenticated || isGuest) {
       dispatch(loadUser());
     }
-  }, [dispatch, isAuthenticated, isAdmin, adminAuth, isGuest]);
+  }, [
+    dispatch,
+    isAuthenticated,
+    isAdmin,
+    adminAuth,
+    isGuest,
+    traderAuth,
+    isTrader,
+  ]);
 
   //const { isAuthenticated } = useSelector((state) => state.user);
 
@@ -82,13 +89,13 @@ function App() {
     headerComponent = <AdminHeader />;
   } else if (isAuthenticated && !isAdmin) {
     headerComponent = <Header />;
+  } else if (traderAuth && isTrader) {
+    headerComponent = <TraderHeader />;
   }
 
   return (
     <Router>
-
       {headerComponent}
-
 
       <Routes>
         {isAdmin && (
@@ -109,7 +116,7 @@ function App() {
           </>
         )}
 
-        {(!isAdmin) && (
+        {!isAdmin && (
           <>
             <Route
               path="/"
@@ -123,9 +130,18 @@ function App() {
                 )
               }
             />
+
             <Route
               path="/account"
-              element={isAuthenticated ? <Account /> : <Login />}
+              element={
+                isAuthenticated ? (
+                  <Account />
+                ) : traderAuth ? (
+                  <TraderAccount />
+                ) : (
+                  <Login />
+                )
+              }
             />
 
             <Route path="/news" element={<News />} />
@@ -136,7 +152,7 @@ function App() {
             />
             <Route
               path="/registerTrader"
-              element={isAuthenticated ? <Marketplace /> : <RegisterTrader />}
+              element={traderAuth ? <Marketplace /> : <RegisterTrader />}
             />
 
             <Route
@@ -146,10 +162,13 @@ function App() {
 
             <Route
               path="/marketplace"
-              element={isAuthenticated ? <Marketplace /> : <Login />}
+              element={traderAuth ? <Marketplace /> : <Login />}
             />
 
-            <Route path="/newitem" element={<NewItem />} />
+            <Route
+              path="/newitem"
+              element={traderAuth ? <NewItem /> : <Login />}
+            />
 
             <Route
               path="/newpost"

@@ -34,9 +34,56 @@ exports.createPost = async (req, res) => {
   }
 };
 
+// exports.deletePost = async (req, res) => {
+//   try {
+//     const postId = req.params.id;
+
+//     // Find the post by ID
+//     const post = await Post.findByIdAndDelete(postId);
+
+//     if (!post) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Post not found",
+//       });
+//     }
+
+//     // Check authorization
+//     if (post.owner.toString() !== req.user._id.toString()) {
+//       return res.status(401).json({
+//         success: false,
+//         message: "Unauthorized",
+//       });
+//     }
+
+//     // Remove image from Cloudinary
+//     await cloudinary.v2.uploader.destroy(post.image.public_id);
+
+//     // Update user's posts array
+//     await User.findByIdAndUpdate(req.user._id, {
+//       $pull: { posts: postId }, // Remove post ID from user's posts array
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Post deleted",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
+
 exports.deletePost = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const postId = req.params.id;
+
+    // Find the post by ID
+    const post = await Post.findByIdAndDelete(postId);
 
     if (!post) {
       return res.status(404).json({
@@ -45,35 +92,35 @@ exports.deletePost = async (req, res) => {
       });
     }
 
-    if (post.owner.toString() !== req.user._id.toString()) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
-    }
+    // Check authorization
+    // if (post.owner.toString() !== req.user._id.toString()) {
+    //   return res.status(401).json({
+    //     success: false,
+    //     message: "Unauthorized",
+    //   });
+    // }
 
+    // Remove image from Cloudinary
     await cloudinary.v2.uploader.destroy(post.image.public_id);
 
-    await post.remove();
-
-    const user = await User.findById(req.user._id);
-
-    const index = user.posts.indexOf(req.params.id);
-    user.posts.splice(index, 1);
-
-    await user.save();
+    // Update user's posts array
+    await User.findByIdAndUpdate(post.owner, {
+      $pull: { posts: postId }, // Remove post ID from user's posts array
+    });
 
     res.status(200).json({
       success: true,
       message: "Post deleted",
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
+
 
 exports.likeAndUnlikePost = async (req, res) => {
   try {

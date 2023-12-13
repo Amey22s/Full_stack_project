@@ -82,3 +82,20 @@ export const traderReducer = createReducer(initialState, (builder) => {
 });
 
 // Add more reducers or actions as needed for additional trader functionalities
+export const TraderProfileReducer = createReducer(initialState, (builder) => {
+  builder.addCase('TraderProfileRequest', (state) => {
+    state.loading = true;
+  });
+  builder.addCase('TraderProfileSuccess', (state, action) => {
+    state.loading = false;
+    state.trader = action.payload;
+  });
+
+  builder.addCase('TraderProfileFailure', (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  });
+  builder.addCase('clearErrors', (state) => {
+    state.error = null;
+  });
+});

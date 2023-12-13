@@ -102,3 +102,21 @@ export const logoutTrader = () => async (dispatch) => {
     });
   }
 };
+export const getTraderProfile = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'TraderProfileRequest',
+    });
+    console.log(id, 'id in get trader action');
+    const { data } = await axios.get(`/api/trader/${id}`);
+    dispatch({
+      type: 'TraderProfileSuccess',
+      payload: data.trader,
+    });
+  } catch (error) {
+    dispatch({
+      type: 'TraderProfileFailure',
+      payload: error.response.data.message,
+    });
+  }
+};

@@ -3,12 +3,14 @@ const Item = require('../models/Item');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary');
 const bcrypt = require('bcrypt');
+//const { traderLogin } = require('../../frontend/src/Actions/Trader');
 
 exports.loadTrader = async (req, res) => {
   try {
     const trader = await Trader.findById(req.trader._id).populate(
       'itemsSold itemsBought itemsInterested'
     );
+    console.log('Inside loaad trader', trader);
 
     res.status(200).json({
       success: true,
@@ -131,6 +133,33 @@ exports.logoutTrader = async (req, res) => {
         success: true,
         message: 'Logged out',
       });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+exports.getTrader = async (req, res) => {
+  try {
+    console.log(req.params.id, 'id in get trader controller');
+    const trader = await Trader.findById(req.params.id).populate(
+      'itemsPosted itemsSold itemsBought itemsInterested'
+    );
+    console.log(trader, 'inside get trader controller');
+
+    if (!trader) {
+      return res.status(404).json({
+        success: false,
+        message: 'Trader not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      trader,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,

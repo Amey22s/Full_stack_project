@@ -48,7 +48,9 @@ const Home = () => {
   ) : (
     <div className="home">
       <div className="homeleft">
-        {posts && console.log("Posts in home is ",posts) && posts.length > 0 ? (
+
+        {posts && posts.length > 0 ? (
+
           posts.map((post) => (
             <Post
               key={post._id}

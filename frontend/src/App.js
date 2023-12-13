@@ -16,6 +16,8 @@ import ResetPassword from './Components/ResetPassword/ResetPassword';
 import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
+import { jwtDecode }  from 'jwt-decode'; // For decoding token (optional)
+
 
 import RegisterTrader from './Components/TraderRegister/TraderRegister';
 import Marketplace from './Components/Marketplace/Marketplace';
@@ -32,18 +34,79 @@ import AdminAccount from './Components/AdminAccounts/AdminAccount';
 import AdminUsers from './Components/AdminUsers/AdminUsers';
 //import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
-import TraderHeader from './Components/TraderHeader/TraderHeader';
-import { loadTrader } from './Actions/Trader';
 
-import TraderProfile from './Components/TraderProfile/Traderprofile';
+import { loadTrader } from './Actions/Trader';
 
 function App() {
   const dispatch = useDispatch();
   const state = useState();
+  const [token, setToken] = useState(null);
 
   // useEffect(() => {
   //   dispatch(loadUser());
   // }, [dispatch]);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    console.log("stored token is = ", storedToken);
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
+
+
+  // useEffect(() => {
+  //   if (token) {
+  //     localStorage.setItem('token', token); // Store token in localStorage
+  //   }
+  // }, [token]);
+  
+
+
+
+  useEffect(() => {
+    console.log('Search results is ', state.searchResults);
+    localStorage.setItem('searchResults', JSON.stringify(state.searchResults));
+  }, [state.searchResults]);
+
+  // useEffect(() => {
+  //   console.log("isAuthenticated = " + isAuthenticated);
+  //   console.log("isAdmin = " + isAdmin);
+  //   console.log("adminAuth = " + adminAuth);
+  //   console.log("is Guest = ", isGuest);
+
+  //   if (adminAuth && isAdmin) {
+  //     dispatch(loadAdmin());
+  //   } else if (traderAuth && isTrader) {
+  //     dispatch(loadTrader());
+  //   } else if (isAuthenticated || isGuest) {
+  //     dispatch(loadUser());
+  //   }
+  // }, [dispatch, isAuthenticated, isAdmin, adminAuth, isGuest]);
+
+
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token); // Decode token if needed
+        //console.log("decoded token = ", decodedToken);
+        const { role, _id } = decodedToken; // Extract relevant user info
+
+        if (role === 'admin') {
+          dispatch(loadAdmin(token));
+        } else if (role === 'trader') {
+          dispatch(loadTrader(_id, token)); // Use user ID for trader
+        } else {
+          dispatch(loadUser(token));
+        }
+      } catch (error) {
+        // Handle token expiration or invalid format
+        setToken(null);
+      }
+    } else {
+      dispatch(loadUser()); // Fallback to default user loading
+    }
+  }, [dispatch, token]);
 
   const { isAdmin, isAuthenticated: adminAuth } = useSelector(
     (state) => state.admin
@@ -53,36 +116,6 @@ function App() {
   );
 
   const { isAuthenticated, isGuest } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    console.log('Search results is ', state.searchResults);
-    localStorage.setItem('searchResults', JSON.stringify(state.searchResults));
-  }, [state.searchResults]);
-
-  useEffect(() => {
-    // console.log("isAuthenticated = " + isAuthenticated);
-    // console.log("isAdmin = " + isAdmin);
-    // console.log("adminAuth = " + adminAuth);
-
-    console.log('is Guest = ', isGuest);
-
-    if (adminAuth && isAdmin) {
-      dispatch(loadAdmin());
-    } else if (traderAuth && isTrader) {
-      dispatch(loadTrader());
-    } else if (isAuthenticated || isGuest) {
-      dispatch(loadUser());
-    }
-  }, [
-    dispatch,
-    isAuthenticated,
-    isAdmin,
-    adminAuth,
-    isGuest,
-    traderAuth,
-    isTrader,
-  ]);
-
   //const { isAuthenticated } = useSelector((state) => state.user);
 
   let headerComponent;
@@ -90,16 +123,15 @@ function App() {
     headerComponent = <AdminHeader />;
   } else if (isAuthenticated && !isAdmin) {
     headerComponent = <Header />;
-  } else if (traderAuth && isTrader) {
-    headerComponent = <TraderHeader />;
   }
 
   return (
     <Router>
+
       {headerComponent}
 
       <Routes>
-        {isAdmin && (
+        {(isAdmin || adminAuth) && (
           <>
             <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
             <Route
@@ -117,7 +149,7 @@ function App() {
           </>
         )}
 
-        {!isAdmin && (
+        {(!isAdmin) && (
           <>
             <Route
               path="/"
@@ -131,18 +163,9 @@ function App() {
                 )
               }
             />
-
             <Route
               path="/account"
-              element={
-                isAuthenticated ? (
-                  <Account />
-                ) : traderAuth ? (
-                  <TraderProfile />
-                ) : (
-                  <Login />
-                )
-              }
+              element={isAuthenticated ? <Account /> : <Login />}
             />
 
             <Route path="/news" element={<News />} />
@@ -153,7 +176,7 @@ function App() {
             />
             <Route
               path="/registerTrader"
-              element={traderAuth ? <Marketplace /> : <RegisterTrader />}
+              element={isAuthenticated ? <Marketplace /> : <RegisterTrader />}
             />
 
             <Route
@@ -163,13 +186,10 @@ function App() {
 
             <Route
               path="/marketplace"
-              element={traderAuth ? <Marketplace /> : <Login />}
+              element={isAuthenticated ? <Marketplace /> : <Login />}
             />
 
-            <Route
-              path="/newitem"
-              element={traderAuth ? <NewItem /> : <Login />}
-            />
+            <Route path="/newitem" element={<NewItem />} />
 
             <Route
               path="/newpost"

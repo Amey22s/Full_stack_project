@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.0",
     "dotenv": "^16.3.1",
+    "jwt-decode": "^4.0.0",
     "react": "^17.0.2",
     "react-alert": "^7.0.3",
     "react-alert-template-basic": "^1.0.2",
@@ -47,5 +48,4 @@
     ]
   },
   "proxy": "http://localhost:4000"
-
 }

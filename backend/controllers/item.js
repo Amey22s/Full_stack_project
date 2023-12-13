@@ -1,5 +1,5 @@
 const Item = require('../models/Item');
-const User = require('../models/User');
+const Trader = require('../models/Trader');
 const cloudinary = require('cloudinary');
 
 exports.createItem = async (req, res) => {
@@ -35,6 +35,11 @@ exports.createItem = async (req, res) => {
 exports.markInterest = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
+    console.log(item, 'item');
+    console.log(req, 'request');
+    console.log(req.trader, 'request.trader');
+    const trader = await Trader.findById(req.trader._id);
+    console.log('Inside markIntereset', item, trader);
 
     if (!item) {
       return res.status(404).json({
@@ -43,16 +48,27 @@ exports.markInterest = async (req, res) => {
       });
     }
 
+    console.log('Item found');
+
     if (item.interestedBuyers.includes(req.trader._id)) {
       return res.status(400).json({
         success: false,
         message: 'You have already shown interest in this item',
       });
     }
+    console.log('Showing interest');
 
     item.interestedBuyers.push(req.trader._id);
+    console.log('interestedBuyers updated');
 
     await item.save();
+    console.log('save and before update iteminterested');
+    // Also update the trader's itemsInterested if the trader exists
+    if (trader && !trader.itemsInterested.includes(item._id)) {
+      trader.itemsInterested.push(item._id);
+      await trader.save();
+    }
+    console.log('itemsInterested updated');
 
     res.status(200).json({
       success: true,
@@ -68,7 +84,9 @@ exports.markInterest = async (req, res) => {
 
 exports.sellItem = async (req, res) => {
   try {
-    const item = await Item.findById(req.params.id);
+    const { id } = req.params;
+    const { buyerId } = req.body;
+    const item = await Item.findById(id);
 
     if (!item) {
       return res.status(404).json({
@@ -84,7 +102,7 @@ exports.sellItem = async (req, res) => {
       });
     }
 
-    if (!item.interestedBuyers.includes(req.body.buyerId)) {
+    if (!item.interestedBuyers.includes(buyerId)) {
       return res.status(400).json({
         success: false,
         message: 'Buyer not interested in this item',
@@ -92,7 +110,7 @@ exports.sellItem = async (req, res) => {
     }
 
     item.status = 'sold';
-    item.soldTo = req.body.buyerId;
+    item.soldTo = buyerId;
 
     await item.save();
 
@@ -105,6 +123,33 @@ exports.sellItem = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+exports.declineSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { buyerId } = req.body;
+
+    const item = await Item.findById(id);
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    if (!item.owner.equals(req.user._id)) {
+      return res.status(403).json({
+        message: 'You are not authorized to decline interest on this item',
+      });
+    }
+
+    item.interestedBuyers = item.interestedBuyers.filter(
+      (id) => !id.equals(buyerId)
+    );
+
+    await item.save();
+
+    res.status(200).json({ message: 'Interest declined successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -139,7 +184,7 @@ exports.getApprovalRequests = async (req, res) => {
     const items = await Item.find({
       owner: req.trader._id,
       'interestedBuyers.0': { $exists: true },
-    });
+    }).populate('interestedBuyers', 'name email');
     res.json({ success: true, items });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

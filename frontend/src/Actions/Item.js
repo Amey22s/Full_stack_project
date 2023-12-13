@@ -20,6 +20,59 @@ export const createItem = (caption, price, image) => async (dispatch) => {
   }
 };
 
+export const markInterest = (itemId) => async (dispatch) => {
+  try {
+    dispatch({ type: 'MarkInterestRequest' });
+
+    // Assuming you have an API endpoint like '/api/items/markInterest/:id'
+    const { data } = await axios.put(`/api/marketplace/${itemId}/interest`);
+
+    dispatch({ type: 'MarkInterestSuccess', payload: data.message });
+  } catch (error) {
+    dispatch({
+      type: 'MarkInterestFailure',
+      payload: error.response.data.message,
+    });
+  }
+};
+export const approveSale = (itemId, buyerId) => async (dispatch) => {
+  try {
+    dispatch({ type: 'ApproveSaleRequest' });
+
+    const { data } = await axios.put(`/api/marketplace/${itemId}/sell`, {
+      buyerId,
+    });
+    dispatch({
+      type: 'ApproveSaleSuccess',
+      payload: { itemId, buyerId, message: data.message },
+    });
+  } catch (error) {
+    dispatch({
+      type: 'ApproveSaleFailure',
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const declineSale = (itemId, buyerId) => async (dispatch) => {
+  try {
+    dispatch({ type: 'DeclineSaleRequest' });
+
+    const { data } = await axios.put(`/api/marketplace/${itemId}/decline`, {
+      buyerId,
+    });
+    dispatch({
+      type: 'DeclineSaleSuccess',
+      payload: { itemId, buyerId, message: data.message },
+    });
+  } catch (error) {
+    dispatch({
+      type: 'DeclineSaleFailure',
+      payload: error.response.data.message,
+    });
+  }
+};
+
 // Action to fetch items on sale
 export const getItemsOnSale = () => async (dispatch) => {
   try {
@@ -43,9 +96,13 @@ export const getMyItems = () => async (dispatch) => {
 // Action to fetch approval requests
 export const getApprovalRequests = () => async (dispatch) => {
   try {
+    dispatch({ type: 'GET_APPROVAL_REQUESTS_REQUEST' });
     const { data } = await axios.get('/api/marketplace/approvalRequests'); // Update with your API endpoint
-    dispatch({ type: 'GET_APPROVAL_REQUESTS_SUCCESS', payload: data.requests });
+    dispatch({ type: 'GET_APPROVAL_REQUESTS_SUCCESS', payload: data.items });
   } catch (error) {
-    dispatch({ type: 'GET_APPROVAL_REQUESTS_FAILURE', payload: error.message });
+    dispatch({
+      type: 'GET_APPROVAL_REQUESTS_FAILURE',
+      payload: error.response.data.message,
+    });
   }
 };

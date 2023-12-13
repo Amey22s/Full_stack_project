@@ -6,6 +6,7 @@ const {
   createItem,
   markInterest,
   sellItem,
+  declineSale,
 } = require('../controllers/item');
 const { isAuthenticated } = require('../middlewares/auth');
 
@@ -28,5 +29,8 @@ router.route('/:id/interest').put(isAuthenticated, markInterest);
 
 // Route for selling an item (approving a buyer)
 router.route('/:id/sell').put(isAuthenticated, sellItem);
+
+// Route for decline sale
+router.route(':id/decline').put(isAuthenticated, declineSale);
 
 module.exports = router;

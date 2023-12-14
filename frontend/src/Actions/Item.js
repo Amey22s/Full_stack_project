@@ -48,6 +48,7 @@ export const approveSale = (itemId, buyerId) => async (dispatch) => {
     });
     // Refresh the trader's approval requests
     dispatch(getTraderApprovalRequests());
+    dispatch(getMyItems());
   } catch (error) {
     dispatch({
       type: 'ApproveSaleFailure',

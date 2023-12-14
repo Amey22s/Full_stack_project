@@ -16,8 +16,6 @@ import ResetPassword from './Components/ResetPassword/ResetPassword';
 import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
-import { jwtDecode }  from 'jwt-decode'; // For decoding token (optional)
-
 
 import RegisterTrader from './Components/TraderRegister/TraderRegister';
 import Marketplace from './Components/Marketplace/Marketplace';
@@ -37,7 +35,7 @@ import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileFor
 
 import GuestHome from './Components/GuestHome/GuestHome';
 import GuestHeader from './Components/GuestHeader/GuestHeader';
-
+import TraderHeader from './Components/TraderHeader/TraderHeader';
 import { loadTrader } from './Actions/Trader';
 
 function App() {
@@ -57,7 +55,6 @@ function App() {
   //   }
   // }, []);
 
-
   // useEffect(() => {
   //   if (token) {
   //     localStorage.setItem('token', token); // Store token in localStorage
@@ -73,8 +70,6 @@ function App() {
 
   const { isAuthenticated, isGuest } = useSelector((state) => state.user);
 
-
-
   useEffect(() => {
     console.log('Search results is ', state.searchResults);
     localStorage.setItem('searchResults', JSON.stringify(state.searchResults));
@@ -88,8 +83,15 @@ function App() {
     } else if (isAuthenticated || isGuest) {
       dispatch(loadUser());
     }
-  }, [dispatch, isAuthenticated, isAdmin, adminAuth, isGuest, isTrader, traderAuth]);
-
+  }, [
+    dispatch,
+    isAuthenticated,
+    isAdmin,
+    adminAuth,
+    isGuest,
+    isTrader,
+    traderAuth,
+  ]);
 
   // useEffect(() => {
 
@@ -120,15 +122,18 @@ function App() {
     headerComponent = <AdminHeader />;
   } else if (isAuthenticated && !isAdmin) {
     headerComponent = <Header />;
-  } else headerComponent = <GuestHeader/>
+  } else if (traderAuth && isTrader) {
+    headerComponent = <TraderHeader />;
+  } else {
+    headerComponent = <GuestHeader />;
+  }
 
   return (
     <Router>
-
       {headerComponent}
 
       <Routes>
-        {(isAdmin) && (
+        {isAdmin && (
           <>
             <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
             <Route
@@ -156,11 +161,9 @@ function App() {
           </>
         )} */}
 
-        {(!isAdmin) && (
+        {!isAdmin && (
           <>
-
             <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
-
 
             <Route
               path="/account"
@@ -175,7 +178,7 @@ function App() {
             />
             <Route
               path="/registerTrader"
-              element={isAuthenticated ? <Marketplace /> : <RegisterTrader />}
+              element={traderAuth ? <Marketplace /> : <RegisterTrader />}
             />
 
             <Route
@@ -185,10 +188,13 @@ function App() {
 
             <Route
               path="/marketplace"
-              element={isAuthenticated ? <Marketplace /> : <Login />}
+              element={traderAuth ? <Marketplace /> : <Login />}
             />
 
-            <Route path="/newitem" element={<NewItem />} />
+            <Route
+              path="/newitem"
+              element={traderAuth ? <NewItem /> : <Login />}
+            />
 
             <Route
               path="/newpost"

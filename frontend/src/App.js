@@ -69,7 +69,7 @@ function App() {
     (state) => state.trader
   );
 
-  const { isAuthenticated, isGuest } = useSelector((state) => state.user);
+  const { isAuthenticated, isGuest, user } = useSelector((state) => state.user);
 
   useEffect(() => {
     console.log('Search results is ', state.searchResults);
@@ -77,11 +77,19 @@ function App() {
   }, [state.searchResults]);
 
   useEffect(() => {
+
+    console.log("IsAuthenticated is ",isAuthenticated);
+    console.log("isAdmin is ",isAdmin);
+    console.log("isTrader is ",isTrader);
+    console.log("isGuest is ",isGuest);
+    console.log("adminAuth is ",adminAuth);
+    console.log("traderAuth is ",traderAuth);
+    console.log("User is ",user);
     if (adminAuth && isAdmin) {
       dispatch(loadAdmin());
     } else if (traderAuth && isTrader) {
       dispatch(loadTrader());
-    } else if (isAuthenticated || isGuest) {
+    } else {
       dispatch(loadUser());
     }
   }, [
@@ -118,20 +126,24 @@ function App() {
   //   }
   // }, [dispatch, token]);
 
-  let headerComponent;
-  if (adminAuth && isAdmin) {
-    headerComponent = <AdminHeader />;
-  } else if (isAuthenticated && !isAdmin) {
-    headerComponent = <Header />;
-  } else if (traderAuth && isTrader) {
-    headerComponent = <TraderHeader />;
-  } else {
-    headerComponent = <GuestHeader />;
-  }
+  // let headerComponent;
+  // if (adminAuth && isAdmin) {
+  //   headerComponent = <AdminHeader />;
+  // } else if (isAuthenticated && !isAdmin) {
+  //   headerComponent = <Header />;
+  // } else if (traderAuth && isTrader) {
+  //   headerComponent = <TraderHeader />;
+  // } else {
+  //   headerComponent = <GuestHeader />;
+  // }
 
   return (
     <Router>
-      {headerComponent}
+      {adminAuth && isAdmin && <AdminHeader />}
+      { traderAuth && isTrader && <TraderHeader />}
+      {((isAuthenticated && !isAdmin && !isTrader) || isGuest) && <Header />}
+
+      {/* { !isAuthenticated && !isAdmin && !isTrader && !adminAuth && !traderAuth && isGuest && <GuestHeader />} */}
 
       <Routes>
         {isAdmin && (
@@ -151,19 +163,35 @@ function App() {
             />
             <Route
               path="/registerAdmin"
-              element={isAuthenticated ? <AdminAccount /> : <AdminRegister />}
+              element={adminAuth ? <AdminHome /> : <AdminRegister />}
             />
           </>
         )}
 
-        {/* {(isGuest && isAuthenticated) && (
-          <>
-            <Route path="/" element={isAuthenticated ? <GuestHome /> : <Login />} />
-          </>
-        )} */}
-
         {!isAdmin && (
-          <>
+           isTrader ? 
+            (<>
+              <Route
+              path="/registerTrader"
+              element={traderAuth ? <Marketplace /> : <RegisterTrader />}
+            />
+
+            <Route
+              path="/marketplace"
+              element={traderAuth ? <Marketplace /> : <Login />}
+            />
+
+            <Route
+              path="/newitem"
+              element={traderAuth ? <NewItem /> : <Login />}
+            />
+            <Route
+              path="/account"
+              element={traderAuth ? <TraderProfile /> : <Login />}
+            />
+            </> ):
+
+          (<>
             <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
 
             <Route
@@ -183,26 +211,7 @@ function App() {
 
             <Route
               path="/register"
-              element={isAuthenticated ? <Account /> : <Register />}
-            />
-            <Route
-              path="/registerTrader"
-              element={traderAuth ? <Marketplace /> : <RegisterTrader />}
-            />
-
-            <Route
-              path="/registerAdmin"
-              element={isAuthenticated ? <AdminAccount /> : <AdminRegister />}
-            />
-
-            <Route
-              path="/marketplace"
-              element={traderAuth ? <Marketplace /> : <Login />}
-            />
-
-            <Route
-              path="/newitem"
-              element={traderAuth ? <NewItem /> : <Login />}
+              element={isAuthenticated ? <Home /> : <Register />}
             />
 
             <Route
@@ -246,8 +255,26 @@ function App() {
               element={isAuthenticated ? <Inbox /> : <Login />}
             />
 
-            <Route path="search" element={<Search />} />
+            <Route path="/search" element={isAuthenticated ? <Search /> : <Login/>} />
+          </>)
+        )}
+
+      {isGuest && !isAuthenticated && (
+          <>
+            <Route path="/" element={<GuestHome />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/search" element={isAuthenticated ? <Search /> : <Login/>} />
+            <Route
+              path="/account"
+              element={isAuthenticated ? <Account /> : <Login />}
+            />
+
+            <Route
+              path="/newpost"
+              element={isAuthenticated ? <NewPost /> : <Login />}
+            />
           </>
+          
         )}
         <Route path="*" element={<NotFound />} />
       </Routes>

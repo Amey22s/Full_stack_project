@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Post = require("../models/Post");
+const Message = require("../models/Message");
 const { sendEmail } = require("../middlewares/sendEmail");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary");
@@ -52,7 +53,7 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
 
-    console.log("email pwd in user login is ",email," ",password)
+    // console.log("email pwd in user login is ",email," ",password)
 
 
     const user = await User.findOne({ email })
@@ -60,7 +61,7 @@ exports.login = async (req, res) => {
       .populate("posts followers following");
 
 
-      console.log("user in user login is ",user)
+      // console.log("user in user login is ",user)
 
     if (!user) {
       return res.status(400).json({
@@ -255,6 +256,26 @@ exports.deleteMyProfile = async (req, res) => {
     const followers = user.followers;
     const following = user.following;
     const userId = user._id;
+    const convo = user.conversations;
+    const messages = user.messages;
+
+    for (let i = convo.length - 1; i >= 0; i--) {
+      const msg = await User.findById(convo[i]);
+      msg.messages = msg.messages.filter(val => !messages.includes(val));
+      await msg.save();
+    }
+
+
+    //Remove user from all associated conversations
+    for (let i = convo.length - 1; i >= 0; i--) {
+      const chat = await User.findById(convo[i]);
+
+      const index = chat.conversations.indexOf(userId);
+      if (index !== -1) {
+        chat.conversations.splice(index, 1);
+        await chat.save(); // Save conversation document after update
+      }
+    }
 
     // Remove avatar from cloudinary
     await cloudinary.v2.uploader.destroy(user.avatar.public_id);
@@ -264,6 +285,9 @@ exports.deleteMyProfile = async (req, res) => {
 
     // Delete all posts of the user
     await Post.deleteMany({ _id: { $in: posts } }); // Use deleteMany with ID array
+
+    // Delete all messages of the User
+    await Message.deleteMany({_id: {$in: messages}}); // Use deleteMany with ID array
 
     // Remove User from Followers' Following
     for (let i = followers.length - 1; i >= 0; i--) {
@@ -312,7 +336,15 @@ exports.deleteMyProfile = async (req, res) => {
 
 exports.myProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).populate(
+    console.log("Req.user in myProfile is ",req.user);
+    console.log("Req.user.name in myProfile is ",req.user.name);
+    
+    var user;
+    if(req.user.name !== "guest")
+    {
+      console.log("In If of Myprofile");
+   
+    user = await User.findById(req.user._id).populate(
       "posts followers following"
     );
 
@@ -320,6 +352,39 @@ exports.myProfile = async (req, res) => {
       success: true,
       user,
     });
+    }
+    else
+    {
+      console.log("In else of Myprofile");
+
+    if(req.user.name === "guest")
+    {
+      console.log("In if of guest in profile")
+      user = req.user;
+      console.log("User here is ",user);
+      res.status(200).json({
+        success: true,
+        user,
+      });
+    }
+    else {
+      console.log("In else of guest in profile")
+      user = {"name":"guest"};
+      const token = "Guest User"
+
+      const options = {
+        expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+      };
+
+      console.log("User in last else in myProfile is ",user);
+      res.status(201).cookie("token", token, options).json({
+        success: true,
+        user,
+        token,
+      });
+    }
+    }
   } catch (error) {
     res.status(500).json({
       success: false,

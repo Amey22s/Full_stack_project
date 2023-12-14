@@ -1,5 +1,15 @@
 import { createReducer } from "@reduxjs/toolkit";
-const initialState = {};
+const initialState = {
+  loading: false,
+  admin: null,
+  isAuthenticated: false,
+  isAdmin: false,
+  isTrader: false,
+  isGuest: false,
+  adminAuth: false,
+  traderAuth: false,
+  error: null
+};
 
 export const adminReducer = createReducer(initialState, builder => {
     builder.addCase("AdminLoginRequest", (state) => {
@@ -10,6 +20,7 @@ export const adminReducer = createReducer(initialState, builder => {
       state.admin = action.payload;
       state.isAuthenticated = true;
       state.isAdmin = true;
+      state.isGuest = false;
     })
     builder.addCase("AdminLoginFailure", (state, action) => {
       state.loading = false;
@@ -24,6 +35,7 @@ export const adminReducer = createReducer(initialState, builder => {
       state.admin = action.payload;
       state.isAuthenticated = true;
       state.isAdmin = true;
+
     })
     builder.addCase("AdminRegisterFailure", (state, action) => {
       state.loading = false;
@@ -38,6 +50,7 @@ export const adminReducer = createReducer(initialState, builder => {
       state.admin = action.payload;
       state.isAuthenticated = true;
       state.isAdmin = true;
+      state.isGuest = false;
     })
     builder.addCase("LoadAdminFailure", (state, action) => {
       state.loading = false;
@@ -52,7 +65,7 @@ export const adminReducer = createReducer(initialState, builder => {
       state.loading = false;
       state.admin = null;
       state.isAuthenticated = false;
-      state.isAdmin = true;
+      state.isAdmin = false;
     })
     builder.addCase("LogoutAdminFailure", (state, action) => {
       state.loading = false;

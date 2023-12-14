@@ -320,3 +320,19 @@ exports.deleteComment = async (req, res) => {
     });
   }
 };
+
+exports.getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find().populate("owner likes comments.user");
+
+    res.status(200).json({
+      success: true,
+      posts: posts.reverse(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

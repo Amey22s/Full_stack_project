@@ -5,6 +5,7 @@ import {
   userProfileReducer,
   userReducer,
   newsReducer,
+  allPostsReducer
 } from './Reducers/User';
 import { likeReducer, myPostsReducer, userPostsReducer } from './Reducers/Post';
 
@@ -40,6 +41,8 @@ const store = configureStore({
     admin: adminReducer,
     allUsersForAdmin: allUsersForAdminReducer,
     news: newsReducer,
+
+    allPosts: allPostsReducer
     traderProfile: TraderProfileReducer,
   },
 });

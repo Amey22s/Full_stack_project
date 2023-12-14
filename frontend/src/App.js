@@ -43,19 +43,19 @@ import { loadTrader } from './Actions/Trader';
 function App() {
   const dispatch = useDispatch();
   const state = useState();
-  const [token, setToken] = useState(null);
+  //const [token, setToken] = useState(null);
 
   // useEffect(() => {
   //   dispatch(loadUser());
   // }, [dispatch]);
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    console.log("stored token is = ", storedToken);
-    if (storedToken) {
-      setToken(storedToken);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem('token');
+  //   console.log("stored token is = ", storedToken);
+  //   if (storedToken) {
+  //     setToken(storedToken);
+  //   }
+  // }, []);
 
 
   // useEffect(() => {
@@ -63,52 +63,6 @@ function App() {
   //     localStorage.setItem('token', token); // Store token in localStorage
   //   }
   // }, [token]);
-  
-
-
-
-  useEffect(() => {
-    console.log('Search results is ', state.searchResults);
-    localStorage.setItem('searchResults', JSON.stringify(state.searchResults));
-  }, [state.searchResults]);
-
-  // useEffect(() => {
-  //   if (adminAuth && isAdmin) {
-  //     dispatch(loadAdmin());
-  //   } else if (traderAuth && isTrader) {
-  //     dispatch(loadTrader());
-  //   } else if (isAuthenticated || isGuest) {
-  //     dispatch(loadUser());
-  //   }
-  // }, [dispatch, isAuthenticated, isAdmin, adminAuth, isGuest]);
-
-
-  useEffect(() => {
-
-    console.log("")
-
-
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token); // Decode token if needed
-        //console.log("decoded token = ", decodedToken);
-        const { role, _id } = decodedToken; // Extract relevant user info
-
-        if (role === 'admin') {
-          dispatch(loadAdmin(token));
-        } else if (role === 'trader') {
-          dispatch(loadTrader(_id, token)); // Use user ID for trader
-        } else {
-          dispatch(loadUser(token));
-        }
-      } catch (error) {
-        // Handle token expiration or invalid format
-        setToken(null);
-      }
-    } else {
-      dispatch(loadUser()); // Fallback to default user loading
-    }
-  }, [dispatch, token]);
 
   const { isAdmin, isAuthenticated: adminAuth } = useSelector(
     (state) => state.admin
@@ -119,13 +73,54 @@ function App() {
 
   const { isAuthenticated, isGuest } = useSelector((state) => state.user);
 
+
+
+  useEffect(() => {
+    console.log('Search results is ', state.searchResults);
+    localStorage.setItem('searchResults', JSON.stringify(state.searchResults));
+  }, [state.searchResults]);
+
+  useEffect(() => {
+    if (adminAuth && isAdmin) {
+      dispatch(loadAdmin());
+    } else if (traderAuth && isTrader) {
+      dispatch(loadTrader());
+    } else if (isAuthenticated || isGuest) {
+      dispatch(loadUser());
+    }
+  }, [dispatch, isAuthenticated, isAdmin, adminAuth, isGuest, isTrader, traderAuth]);
+
+
+  // useEffect(() => {
+
+  //   if (token) {
+  //     try {
+  //       const decodedToken = jwtDecode(token); // Decode token if needed
+  //       //console.log("decoded token = ", decodedToken);
+  //       const { role, _id } = decodedToken; // Extract relevant user info
+
+  //       if (role === 'admin') {
+  //         dispatch(loadAdmin(token));
+  //       } else if (role === 'trader') {
+  //         dispatch(loadTrader(_id, token)); // Use user ID for trader
+  //       } else {
+  //         dispatch(loadUser(token));
+  //       }
+  //     } catch (error) {
+  //       // Handle token expiration or invalid format
+  //       setToken(null);
+  //     }
+  //   } else {
+  //     dispatch(loadUser()); // Fallback to default user loading
+  //   }
+  // }, [dispatch, token]);
+
   let headerComponent;
   if (adminAuth && isAdmin) {
     headerComponent = <AdminHeader />;
-  } else if (isAuthenticated && !isAdmin && !isGuest) {
+  } else if (isAuthenticated && !isAdmin) {
     headerComponent = <Header />;
-  }
-  else headerComponent = <GuestHeader/>
+  } else headerComponent = <GuestHeader/>
 
   return (
     <Router>
@@ -133,9 +128,9 @@ function App() {
       {headerComponent}
 
       <Routes>
-        {(isAdmin || adminAuth) && (
+        {(isAdmin) && (
           <>
-            <Route path="/" element={adminAuth ? <GuestHome /> : <Login />} />
+            <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
             <Route
               path="/account"
               element={adminAuth ? <AdminAccount /> : <Login />}
@@ -147,6 +142,10 @@ function App() {
             <Route
               path="/adminUsers/:id"
               element={adminAuth ? <UserProfileForAdmin /> : <Login />}
+            />
+            <Route
+              path="/registerAdmin"
+              element={isAuthenticated ? <AdminAccount /> : <AdminRegister />}
             />
           </>
         )}
@@ -189,7 +188,7 @@ function App() {
 
             <Route
               path="/registerAdmin"
-              element={isAuthenticated ? <Account /> : <AdminRegister />}
+              element={isAuthenticated ? <AdminAccount /> : <AdminRegister />}
             />
 
             <Route

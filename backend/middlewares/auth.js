@@ -33,12 +33,12 @@ exports.isAuthenticated = async (req, res, next) => {
     const { token } = req.cookies;
     console.log("Token is ",token);
     if (typeof token === 'undefined') {
-      // res.status(401).json({
-      // success: false,
-      // message: 'Please login!',
-      // });
-      req.isGuest = true;
-      next();
+      res.status(401).json({
+      success: false,
+      message: 'Please login!',
+      });
+      // req.isGuest = true;
+      // next();
     }
 
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);

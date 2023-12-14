@@ -12,6 +12,7 @@ const AdminUsers = () => {
   const { users, loading, error } = useSelector((state) => state.allUsersForAdmin);
 
   useEffect(() => {
+    console.log("users list for deletion in admin = ", users);
     dispatch(getAllUsersForAdmin());
   }, [dispatch]);
 

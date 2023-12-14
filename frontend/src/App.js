@@ -35,6 +35,9 @@ import AdminUsers from './Components/AdminUsers/AdminUsers';
 //import UserAccountForAdmin from './Components/UserAccountsForAdmin/UserAccountsForAdmin';
 import UserProfileForAdmin from './Components/UserProfileForAdmin/UserProfileForAdmin';
 
+import GuestHome from './Components/GuestHome/GuestHome';
+import GuestHeader from './Components/GuestHeader/GuestHeader';
+
 import { loadTrader } from './Actions/Trader';
 
 function App() {
@@ -70,11 +73,6 @@ function App() {
   }, [state.searchResults]);
 
   // useEffect(() => {
-  //   console.log("isAuthenticated = " + isAuthenticated);
-  //   console.log("isAdmin = " + isAdmin);
-  //   console.log("adminAuth = " + adminAuth);
-  //   console.log("is Guest = ", isGuest);
-
   //   if (adminAuth && isAdmin) {
   //     dispatch(loadAdmin());
   //   } else if (traderAuth && isTrader) {
@@ -86,6 +84,10 @@ function App() {
 
 
   useEffect(() => {
+
+    console.log("")
+
+
     if (token) {
       try {
         const decodedToken = jwtDecode(token); // Decode token if needed
@@ -116,14 +118,14 @@ function App() {
   );
 
   const { isAuthenticated, isGuest } = useSelector((state) => state.user);
-  //const { isAuthenticated } = useSelector((state) => state.user);
 
   let headerComponent;
   if (adminAuth && isAdmin) {
     headerComponent = <AdminHeader />;
-  } else if (isAuthenticated && !isAdmin) {
+  } else if (isAuthenticated && !isAdmin && !isGuest) {
     headerComponent = <Header />;
   }
+  else headerComponent = <GuestHeader/>
 
   return (
     <Router>
@@ -133,7 +135,7 @@ function App() {
       <Routes>
         {(isAdmin || adminAuth) && (
           <>
-            <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
+            <Route path="/" element={adminAuth ? <GuestHome /> : <Login />} />
             <Route
               path="/account"
               element={adminAuth ? <AdminAccount /> : <Login />}
@@ -148,6 +150,12 @@ function App() {
             />
           </>
         )}
+
+        {/* {(isGuest && isAuthenticated) && (
+          <>
+            <Route path="/" element={isAuthenticated ? <GuestHome /> : <Login />} />
+          </>
+        )} */}
 
         {(!isAdmin) && (
           <>

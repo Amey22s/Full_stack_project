@@ -144,3 +144,21 @@ export const newsReducer = createReducer(initialState, builder => {
     state.error = null;
   })
 })
+
+export const allPostsReducer = createReducer(initialState, builder => {
+
+  builder.addCase("allPostsRequest", (state) => {
+    state.loading = true;
+  })
+  builder.addCase("allPostsSuccess", (state, action) => {
+    state.loading = false;
+    state.posts = action.payload;
+  })
+  builder.addCase("allPostsFailure", (state, action) => {
+    state.loading = false;
+    state.error = action.payload;
+  })
+  builder.addCase("clearErrors", (state) => {
+    state.error = null;
+  })
+});

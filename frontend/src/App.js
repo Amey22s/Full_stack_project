@@ -146,6 +146,21 @@ function App() {
       {/* { !isAuthenticated && !isAdmin && !isTrader && !adminAuth && !traderAuth && isGuest && <GuestHeader />} */}
 
       <Routes>
+
+
+      {isGuest && !isAuthenticated && (
+          <>
+            <Route path="/" element={<GuestHome />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/search" element={isAuthenticated ? <Search /> : <Login/>} />
+
+            <Route
+              path="/newpost"
+              element={isAuthenticated ? <NewPost /> : <Login />}
+            />
+          </>
+          
+        )}
         {isAdmin && (
           <>
             <Route path="/" element={adminAuth ? <AdminHome /> : <Login />} />
@@ -169,8 +184,7 @@ function App() {
         )}
 
         {!isAdmin && (
-           isTrader ? 
-            (<>
+        <>
               <Route
               path="/registerTrader"
               element={traderAuth ? <Marketplace /> : <RegisterTrader />}
@@ -185,18 +199,20 @@ function App() {
               path="/newitem"
               element={traderAuth ? <NewItem /> : <Login />}
             />
-            <Route
-              path="/account"
-              element={traderAuth ? <TraderProfile /> : <Login />}
-            />
-            </> ):
 
-          (<>
             <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
 
             <Route
               path="/account"
-              element={isAuthenticated ? <Account /> : <Login />}
+              element={
+                isAuthenticated ? (
+                  <Account />
+                ) : traderAuth ? (
+                  <TraderProfile />
+                ) : (
+                  <Login />
+                )
+              }
             />
 
             <Route path="/news" element={<News />} />
@@ -249,25 +265,7 @@ function App() {
 
             <Route path="/search" element={isAuthenticated ? <Search /> : <Login/>} />
           </>)
-        )}
-
-      {isGuest && !isAuthenticated && (
-          <>
-            <Route path="/" element={<GuestHome />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/search" element={isAuthenticated ? <Search /> : <Login/>} />
-            <Route
-              path="/account"
-              element={isAuthenticated ? <Account /> : <Login />}
-            />
-
-            <Route
-              path="/newpost"
-              element={isAuthenticated ? <NewPost /> : <Login />}
-            />
-          </>
-          
-        )}
+        }
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

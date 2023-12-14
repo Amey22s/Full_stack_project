@@ -39,19 +39,82 @@ export const itemReducer = createReducer(initialState, (builder) => {
     .addCase('GET_MY_ITEMS_FAILURE', (state, action) => {
       state.error = action.payload;
     })
-    // Handling fetching approval requests
-    .addCase('GET_APPROVAL_REQUESTS_SUCCESS', (state, action) => {
-      state.approvalRequests = action.payload;
-    })
-    .addCase('GET_APPROVAL_REQUESTS_FAILURE', (state, action) => {
-      state.error = action.payload;
-    })
+
     // Handling clear actions
-    .addCase('clearItemErrors', (state) => {
-      state.error = null;
-    })
+
     .addCase('clearItemMessages', (state) => {
       state.message = null;
+    })
+    .addCase('MarkInterestRequest', (state) => {
+      state.loading = true;
+    })
+    .addCase('MarkInterestSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload;
+      state.interestMarked = true;
+      // Updating the itemsOnSale to reflect interest marked
+      state.itemsOnSale = state.itemsOnSale.map((item) => {
+        if (item._id === action.payload.itemId) {
+          // Assuming the backend response includes the itemId
+          return { ...item, interested: true };
+        }
+        return item;
+      });
+    })
+    .addCase('MarkInterestFailure', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    // Handling approving sale
+    .addCase('ApproveSaleRequest', (state) => {
+      state.loading = true;
+    })
+    .addCase('ApproveSaleSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      console.log('inside item reducer payload', action.payload);
+      // Update item status to 'sold' and set soldTo
+      state.myItems = state.myItems.map((item) =>
+        item._id === action.payload.itemId
+          ? { ...item, status: 'sold', soldTo: action.payload.buyerId }
+          : item
+      );
+      state.approvalRequests = state.approvalRequests.filter(
+        (request) => request._id !== action.payload.itemId
+      );
+    })
+    .addCase('ApproveSaleFailure', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+
+    // Handling declining interest
+    .addCase('DeclineSaleRequest', (state) => {
+      state.loading = true;
+    })
+    .addCase('DeclineSaleSuccess', (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.myItems = state.myItems.map((item) =>
+        item._id === action.payload.itemId
+          ? {
+              ...item,
+              interestedBuyers: item.interestedBuyers.filter(
+                (buyerId) => buyerId !== action.payload.buyerId
+              ),
+            }
+          : item
+      );
+      state.approvalRequests = state.approvalRequests.filter(
+        (request) => request._id !== action.payload.itemId
+      );
+    })
+    .addCase('DeclineSaleFailure', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    .addCase('clearItemErrors', (state) => {
+      state.error = null;
     });
 });
 

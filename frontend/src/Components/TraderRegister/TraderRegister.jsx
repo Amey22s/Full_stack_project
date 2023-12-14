@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Avatar, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
+import { useNavigate } from 'react-router-dom';
 import { registerTrader } from "../../Actions/Trader"; // Import the action
 import "./TraderRegister.css"; // Create a corresponding CSS file for styling
 
@@ -12,7 +13,7 @@ const RegisterTrader = () => {
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
   const [password, setPassword] = useState("");
-
+const navigate = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
   const { loading, error } = useSelector((state) => state.trader);
@@ -33,6 +34,7 @@ const RegisterTrader = () => {
     e.preventDefault();
     console.log("sending dispatch to registerTrader")
     dispatch(registerTrader(name, email, password, avatar));
+navigate('/');
   };
 
   useEffect(() => {

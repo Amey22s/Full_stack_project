@@ -5,6 +5,7 @@ import User from "../User/User";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getAllMessages, getMyConversations } from "../../Actions/Message";
+import { getUserProfile } from "../../Actions/User";
 import Loader from "../Loader/Loader";
 import NewChat from '../NewChat/NewChat';
 import { Avatar, Typography } from "@mui/material";
@@ -21,8 +22,9 @@ function Inbox() {
   const alert = useAlert();
   const params = useParams();
 
+  const {user} = useSelector((state) => state.userProfile);
 
-  const { user, loading: userLoading } = useSelector((state) => state.user, shallowEqual);
+  const { user:me, loading: meLoading } = useSelector((state) => state.user, shallowEqual);
 
   const { loading, error, conversations } = useSelector(
     (state) => state.myConversations, shallowEqual
@@ -34,19 +36,20 @@ function Inbox() {
 
   useEffect(() => {
     // Fetch conversations from backend API
-    console.log("User is ",user)
+    console.log("User is ",me)
     dispatch(getMyConversations())
     setSelectedConv(selectedConversation);
   },[dispatch]);
 
   useEffect(() => {
     dispatch(getAllMessages(params.id));
+    dispatch(getUserProfile(params.id));
     setReceiver(params.id)
     setSelectedConv(selectedConversation);
-    console.log("Receiver in Inbox is ",receiver);
+    console.log("Receiver in Inbox is ",user);
     console.log("SelecteConversation in Inbox is ",selectedConversation);
     console.log("Conversations in Inbox is ",conversations)
-  }, [dispatch, params.id]);
+  }, [dispatch, params.id,selectedConversation]);
 
 
 
@@ -64,7 +67,7 @@ function Inbox() {
 
 
 
-  return loading === true || userLoading === true ? (
+  return loading === true || meLoading === true ? (
     <Loader />
   ) : (
 
@@ -72,16 +75,16 @@ function Inbox() {
       <div className="inboxleft">
       { (
         <div>
-          <h2>Conversation with {receiver}</h2>
+          <h2>{user === undefined ? 'Start a new conversation' : `Conversation with ${user.name}`}</h2>
           <ul>
             {selectedConversation && (selectedConversation.map(message => (
               <li key={message._id}>
-              {message.sender +": "+message.text}
+              {(message.sender === user._id ? user.name : me.name)+": "+message.text}
               </li>
             )))}
           </ul>
           <NewChat 
-          sender = {user._id}
+          sender = {me._id}
           receiver = {receiver} />
           </div>
       )
@@ -102,8 +105,8 @@ function Inbox() {
           }
           <div>
           <Typography>Start a Conversation</Typography>
-          { user.following && user.following.length > 0 ? (
-            user.following.map((followee) => (
+          { me.following && me.following.length > 0 ? (
+            me.following.map((followee) => (
               <User
                 key={followee._id}
                 source={"from inbox"}
@@ -122,53 +125,3 @@ function Inbox() {
   )
       }
   export default Inbox;
-
-
-
-//     // <h1>Messages</h1>
-//     <div className='inbox'>
-//        (<ul>
-//         {conversations.map(conversation => (
-//           <li key={conversation._id} onClick={() => handleConversationClick(conversation._id)}>
-//             <Avatar
-//           src={conversation.avatar.url}
-//           sx={{ height: "6vmax", width: "6vmax" }}
-//         />{conversation.name}
-//           </li>
-//         ))}
-//       </ul> ) : (
-//           <Typography>No Conversations Yet</Typography>
-//         )}
-//       </div>
-//       {/* <ul>
-//         {conversations.map(conversation => (
-//           <li key={conversation.id} onClick={() => handleConversationClick(conversation.id)}>
-//             <img src={conversation.userAvatar} alt="" />
-//             <span>{conversation.latestMessage}</span>
-//           </li>
-//         ))}
-//       </ul> */}
-//       {selectedConversation && (
-//         <div className='inboxleft'> 
-//           <h2>Conversation with {selectedConversation[0].receiver.name}</h2>
-//           <ul>
-//             {selectedConversation.map(message => (
-//               <li key={message._id}>
-//                 {/* <Avatar
-//           src={message.sender.avatar.url}
-//           sx={{ height: "2vmax", width: "2vmax" }}
-//             /> */}
-//         {message.sender +": "+message.text}
-//         </li>
-//             ))}
-//           </ul>
-//           <NewChat 
-//           sender = {user._id}
-//           receiver = {receiver} />
-//           {/* <input placeholder="Type your message" onChange={e => handleSendMessage(e.target.value)} />
-//           <button></button> */}
-//         </div>
-//       )}
-//     </div>
-//   );
-// }

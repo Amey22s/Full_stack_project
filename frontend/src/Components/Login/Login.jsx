@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Login.css";
 import { Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, guestLogin } from "../../Actions/User";
 import { useAlert } from "react-alert";
@@ -17,7 +17,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const alert = useAlert();
-
+const navigate = useNavigate();
   const { error } = useSelector((state) => state.user);
   const { message } = useSelector((state) => state.like);
 
@@ -32,6 +32,7 @@ const Login = () => {
     e.preventDefault();
 
     dispatch(traderLogin(email,password));
+    navigate('/marketplace');
   } 
 
   const adminLoginHandler = (e) => {
@@ -79,19 +80,12 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Link to="/forgot/password">
-          <Typography>Forgot Password?</Typography>
-        </Link>
+        
 
         <Button type="submit">Login</Button>
         <Button onClick={traderLoginHandler}>
           Login as Trader
         </Button>
-
-        <Link to='/registerTrader'>
-          <Typography>New Trader?</Typography>
-        </Link>
-
         <Button onClick={handleGuestLogin}>
           Login as Guest
         </Button>
@@ -99,6 +93,12 @@ const Login = () => {
         <Button onClick={adminLoginHandler}>
           Login as Admin
         </Button>
+        <Link to="/forgot/password">
+          <Typography>Forgot Password?</Typography>
+        </Link>
+        <Link to='/registerTrader'>
+          <Typography>New Trader?</Typography>
+        </Link>
 
         <Link to="/register">
           <Typography>New User?</Typography>

@@ -45,6 +45,21 @@ const traderSchema = new mongoose.Schema({
       ref: 'Item',
     },
   ],
+  approvalRequests: [
+    {
+      itemId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Item',
+        required: true,
+      },
+      buyerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Trader',
+        required: true,
+      },
+    },
+  ],
+
   // Additional fields such as address, contact info, etc., can be added here
   createdAt: {
     type: Date,

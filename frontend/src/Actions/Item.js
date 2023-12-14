@@ -12,6 +12,7 @@ export const createItem = (caption, price, image) => async (dispatch) => {
     });
 
     dispatch({ type: 'CreateItemSuccess', payload: data.item });
+    dispatch(getMyItems());
   } catch (error) {
     dispatch({
       type: 'CreateItemFailure',

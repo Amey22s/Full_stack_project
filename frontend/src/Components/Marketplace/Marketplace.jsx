@@ -37,11 +37,11 @@ console.log(approvalRequests, "APPROVAL")
     dispatch(markInterest(itemId));
   }
   const handleApprove = (itemId, buyerId) => {
-    dispatch(approveSale(itemId, buyerId));
+    dispatch(approveSale(itemId, buyerId, traderProfile.trader._id));
   }
 
   const handleDecline = (itemId, buyerId) => {
-    dispatch(declineSale(itemId, buyerId));
+    dispatch(declineSale(itemId, buyerId, traderProfile.trader._id));
   }
   console.log(approvalRequests, "approval request before rendie==ering")
 

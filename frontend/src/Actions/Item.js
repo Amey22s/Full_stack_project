@@ -35,7 +35,7 @@ export const markInterest = (itemId) => async (dispatch) => {
     });
   }
 };
-export const approveSale = (itemId, buyerId) => async (dispatch) => {
+export const approveSale = (itemId, buyerId, traderId) => async (dispatch) => {
   try {
     dispatch({ type: 'ApproveSaleRequest' });
 
@@ -47,7 +47,7 @@ export const approveSale = (itemId, buyerId) => async (dispatch) => {
       payload: { itemId, buyerId, message: data.message },
     });
     // Refresh the trader's approval requests
-    dispatch(getTraderApprovalRequests());
+    dispatch(getTraderApprovalRequests(traderId));
     dispatch(getMyItems());
   } catch (error) {
     dispatch({
@@ -57,7 +57,7 @@ export const approveSale = (itemId, buyerId) => async (dispatch) => {
   }
 };
 
-export const declineSale = (itemId, buyerId) => async (dispatch) => {
+export const declineSale = (itemId, buyerId, traderId) => async (dispatch) => {
   try {
     dispatch({ type: 'DeclineSaleRequest' });
 
@@ -69,7 +69,7 @@ export const declineSale = (itemId, buyerId) => async (dispatch) => {
       payload: { itemId, buyerId, message: data.message },
     });
     // Refresh the trader's approval requests
-    dispatch(getTraderApprovalRequests());
+    dispatch(getTraderApprovalRequests(traderId));
   } catch (error) {
     dispatch({
       type: 'DeclineSaleFailure',

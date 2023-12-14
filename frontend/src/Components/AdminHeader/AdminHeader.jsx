@@ -22,13 +22,6 @@ const AdminHeader = () => {
         )}
       </Link>
 
-      <Link to="/account" onClick={() => setTab("/account")}>
-        {tab === "/account" ? (
-          <AccountCircle style={{ color: "black" }} />
-        ) : (
-          <AccountCircleOutlined />
-        )}
-      </Link>
 
       <Link to="/allUsers" onClick={() => setTab("/allUsers")}>
          {tab === "/allUsers" ? (
@@ -37,6 +30,15 @@ const AdminHeader = () => {
            <PeopleOutlined />
          )}
        </Link>
+
+       
+      <Link to="/account" onClick={() => setTab("/account")}>
+        {tab === "/account" ? (
+          <AccountCircle style={{ color: "black" }} />
+        ) : (
+          <AccountCircleOutlined />
+        )}
+      </Link>
        
     </div>
   );

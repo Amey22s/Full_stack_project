@@ -4,14 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getItemsOnSale, getMyItems, markInterest, approveSale, declineSale } from '../../Actions/Item'; 
 import { getTraderApprovalRequests } from '../../Actions/Trader';
 import './Marketplace.css'; 
+import { useAlert } from 'react-alert';
 
 const Marketplace = () => {
   const [activeTab, setActiveTab] = useState('itemsOnSale');
 const [activeSubTab, setActiveSubTab] = useState('selling');
   const dispatch = useDispatch();
-  const { itemsOnSale, myItems, loading, error } = useSelector(state => state.item);
+  const { itemsOnSale, myItems, message:itemMessage, loading:itemLoading, error:itemError } = useSelector(state => state.item);
   const traderProfile = useSelector(state => state.trader);
-  const {approvalRequests} = useSelector(state => state.trader);
+  const {approvalRequests, loading:traderLoading, error: traderError} = useSelector(state => state.trader);
+  const alert=useAlert();
 console.log("trader profile", traderProfile)
 console.log("trader profile.trader", traderProfile.trader)
 console.log("itrader profile trader id", traderProfile.trader._id)
@@ -30,8 +32,29 @@ console.log("approval request trader profile", traderProfile.approvalRequests)
     dispatch(getTraderApprovalRequests(traderProfile.trader._id));
   }, [dispatch, traderProfile.trader]);
 console.log(approvalRequests, "APPROVAL")
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error}</div>;
+
+  useEffect(() => {
+    if (itemError) {
+      alert.error(itemError);
+      dispatch({ type: "clearItemErrors" }); // Replace with your actual action to clear item errors
+    }
+    if (itemMessage) {
+      alert.success(itemMessage);
+      dispatch({ type: "clearItemMessages" }); // Replace with your action to clear messages
+    }
+  }, [dispatch, itemError, alert, itemMessage]);
+  
+  useEffect(() => {
+    if (traderError) {
+      alert.error(traderError);
+      dispatch({ type: "clearTraderErrors" }); // Replace with your actual action to clear trader errors
+    }
+  }, [dispatch, traderError, alert]);
+  
+  // Rest of your component rendering
+  
 
   const handleMarkInterest = (itemId) =>{
     dispatch(markInterest(itemId));

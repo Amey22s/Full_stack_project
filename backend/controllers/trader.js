@@ -61,7 +61,7 @@ exports.registerTrader = async (req, res) => {
     };
     res.status(201).cookie('token', token, options).json({
       success: true,
-      user,
+      trader,
       token,
     });
   } catch (error) {

@@ -107,7 +107,7 @@ export const TraderProfileReducer = createReducer(initialState, (builder) => {
     state.loading = false;
     state.error = action.payload;
   });
-  builder.addCase('clearErrors', (state) => {
+  builder.addCase('clearTraderErrors', (state) => {
     state.error = null;
   });
 });

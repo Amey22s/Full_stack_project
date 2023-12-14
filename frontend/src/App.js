@@ -37,6 +37,7 @@ import GuestHome from './Components/GuestHome/GuestHome';
 import GuestHeader from './Components/GuestHeader/GuestHeader';
 import TraderHeader from './Components/TraderHeader/TraderHeader';
 import { loadTrader } from './Actions/Trader';
+import TraderProfile from './Components/TraderProfile/Traderprofile';
 
 function App() {
   const dispatch = useDispatch();
@@ -167,7 +168,15 @@ function App() {
 
             <Route
               path="/account"
-              element={isAuthenticated ? <Account /> : <Login />}
+              element={
+                isAuthenticated ? (
+                  <Account />
+                ) : traderAuth ? (
+                  <TraderProfile />
+                ) : (
+                  <Login />
+                )
+              }
             />
 
             <Route path="/news" element={<News />} />

@@ -167,3 +167,34 @@ exports.getTrader = async (req, res) => {
     });
   }
 };
+
+exports.getTraderApprovalRequests = async (req, res) => {
+  try {
+    console.log('reached');
+    const traderId = req.params.traderId;
+    console.log('Inside controller id', traderId);
+    const trader = await Trader.findById(traderId)
+      .populate({
+        path: 'approvalRequests',
+        populate: {
+          path: 'itemId',
+          model: 'Item',
+        },
+      })
+      .populate({
+        path: 'approvalRequests',
+        populate: {
+          path: 'buyerId',
+          model: 'Trader',
+          select: 'name', // Select only necessary fields like 'name'
+        },
+      });
+    console.log('inside controller trader', trader);
+    if (!trader) {
+      return res.status(404).json({ message: 'Trader not found' });
+    }
+    res.json({ success: true, approvalRequests: trader.approvalRequests });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

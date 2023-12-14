@@ -13,7 +13,7 @@ import {
 const TraderProfile = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
-  const params = useParams();
+
   const logoutHandler = () => {
     dispatch(logoutTrader());
   };
@@ -46,13 +46,16 @@ const TraderProfile = () => {
     <div className="traderProfile">
       {trader && (
         <>
-          <div className="traderProfileHeader">
-            <Avatar
-              src={trader.avatar.url}
-              sx={{ height: "8vmax", width: "8vmax" }}
-            />
-            <Typography variant="h5">{trader.name}</Typography>
-          </div>
+         
+          {trader && trader.avatar && (
+  <div className="traderProfileHeader">
+    <Avatar
+      src={trader.avatar.url}
+      sx={{ height: "8vmax", width: "8vmax" }}
+    />
+    <Typography variant="h5">{trader.name}</Typography>
+  </div>
+)}
 
           <div className="traderProfileDetails">
             <div>

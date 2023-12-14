@@ -1,10 +1,12 @@
 const express = require('express');
+//const { getTraderApprovalRequests } = require('../controllers/item');
 const {
   registerTrader,
   loginTrader,
   logoutTrader,
   loadTrader,
   getTrader,
+  getTraderApprovalRequests,
 } = require('../controllers/trader');
 const { isAuthenticated } = require('../middlewares/auth');
 
@@ -22,5 +24,9 @@ router.get('/logout', isAuthenticated, logoutTrader);
 // Load Trader
 router.get('/loadTrader', isAuthenticated, loadTrader);
 router.get('/:id', isAuthenticated, getTrader);
-
+router.get(
+  '/:traderId/approvalRequests',
+  isAuthenticated,
+  getTraderApprovalRequests
+);
 module.exports = router;

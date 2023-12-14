@@ -2,7 +2,7 @@ const express = require('express');
 const {
   getItemsOnSale,
   getMyItems,
-  getApprovalRequests,
+
   createItem,
   markInterest,
   sellItem,
@@ -20,9 +20,6 @@ router.route('/onSale').get(isAuthenticated, getItemsOnSale);
 
 // Route for getting a user's items
 router.route('/myItems').get(isAuthenticated, getMyItems);
-
-// Route for getting approval requests
-router.route('/approvalRequests').get(isAuthenticated, getApprovalRequests);
 
 // Route for marking interest in an item
 router.route('/:id/interest').put(isAuthenticated, markInterest);

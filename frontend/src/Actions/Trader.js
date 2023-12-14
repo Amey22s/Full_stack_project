@@ -120,3 +120,25 @@ export const getTraderProfile = (id) => async (dispatch) => {
     });
   }
 };
+
+// Action to fetch approval requests
+export const getTraderApprovalRequests = (traderId) => async (dispatch) => {
+  try {
+    dispatch({ type: 'TraderApprovalRequestsRequest' });
+
+    const { data } = await axios.get(
+      `/api/trader/${traderId}/approvalRequests`
+    ); // Update with your API endpoint
+    console.log(data, 'data in action');
+    console.log('from getapproval action', data.approvalRequests);
+    dispatch({
+      type: 'TraderApprovalRequestsSuccess',
+      payload: data.approvalRequests,
+    });
+  } catch (error) {
+    dispatch({
+      type: 'TraderApprovalRequestsFailure',
+      payload: error.response.data.message,
+    });
+  }
+};

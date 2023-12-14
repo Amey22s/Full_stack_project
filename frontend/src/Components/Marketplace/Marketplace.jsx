@@ -1,28 +1,35 @@
 import { Button } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItemsOnSale, getMyItems, getApprovalRequests, markInterest, approveSale, declineSale } from '../../Actions/Item'; 
+import { getItemsOnSale, getMyItems, markInterest, approveSale, declineSale } from '../../Actions/Item'; 
+import { getTraderApprovalRequests } from '../../Actions/Trader';
 import './Marketplace.css'; 
 
 const Marketplace = () => {
   const [activeTab, setActiveTab] = useState('itemsOnSale');
 const [activeSubTab, setActiveSubTab] = useState('selling');
   const dispatch = useDispatch();
-  const { itemsOnSale, myItems, approvalRequests, loading, error } = useSelector(state => state.item);
+  const { itemsOnSale, myItems, loading, error } = useSelector(state => state.item);
   const traderProfile = useSelector(state => state.trader);
+  const {approvalRequests} = useSelector(state => state.trader);
 console.log("trader profile", traderProfile)
-  // Check if itemsBought is defined and is an array
-  const itemsBought = traderProfile && Array.isArray(traderProfile.itemsBought)
-    ? traderProfile.itemsBought
-    : [];
+console.log("trader profile.trader", traderProfile.trader)
+console.log("itrader profile trader id", traderProfile.trader._id)
+console.log("approval request trader profile", traderProfile.approvalRequests)
 
+  // Check if itemsBought is defined and is an array
+  const itemsBought = traderProfile.trader && Array.isArray(traderProfile.trader.itemsBought)
+  ? traderProfile.trader.itemsBought
+  : [];
+    console.log("ITEMS BOUGHT", itemsBought)
     console.log("Items bought", itemsBought)
   useEffect(() => {
     dispatch(getItemsOnSale());
     dispatch(getMyItems());
-    dispatch(getApprovalRequests());
-  }, [dispatch]);
-
+    
+    dispatch(getTraderApprovalRequests(traderProfile.trader._id));
+  }, [dispatch, traderProfile.trader]);
+console.log(approvalRequests, "APPROVAL")
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -36,6 +43,8 @@ console.log("trader profile", traderProfile)
   const handleDecline = (itemId, buyerId) => {
     dispatch(declineSale(itemId, buyerId));
   }
+  console.log(approvalRequests, "approval request before rendie==ering")
+
   return (
     <div className="marketplace">
       <div className="tabs">
@@ -81,6 +90,10 @@ console.log("trader profile", traderProfile)
             {item.status === 'available' && item.interestedBuyers && (
           <p>Interested Buyers: {item.interestedBuyers.length}</p>
         )}
+        {item.status === 'pending' &&  (
+          // Render the name of the buyer. You need to fetch the buyer's details based on item.soldTo
+          <p>Sale in progress</p>
+        )}
          {item.status === 'sold' && item.soldTo && (
           // Render the name of the buyer. You need to fetch the buyer's details based on item.soldTo
           <p>Sold to: {item.soldTo.name}</p>
@@ -107,20 +120,23 @@ console.log("trader profile", traderProfile)
 )}
 
 
-
       {activeTab === 'approvalRequests' && (
         <div className="approvalList">
-          {approvalRequests.map(item => (
-            <div key={item._id} className="approvalCard">
-              <div className='approvalDetails'><h3 className='itemTitle'>{item.caption}</h3>
-              <p className='buyerCount'>Interested Buyers: {item.interestedBuyers.length}</p>
-              {item.interestedBuyers.map(buyer =>(
-                <div key={buyer._id} className="buyerInfo">
-                  <span className='buyerName'>{buyer.name}</span>
-                  <button onClick={() => handleApprove(item._id, buyer._id)} className="approveBtn">Approve</button>
-                <button onClick={() => handleDecline(item._id, buyer._id)} className="declineBtn">Decline</button>
-                </div>
-              ))}
+         
+          {approvalRequests.map(request => (
+            
+            <div key={request.itemId} className="approvalCard">
+              <div className='approvalDetails'>
+                <h3 className='itemTitle'>Item Name: {request.itemId.caption}</h3>
+          
+                <div className="buyerInfo">
+            <span className='buyerName'>Buyer Name: {request.buyerId.name}</span><p></p>
+            </div>
+            <div>
+            <button onClick={() => handleApprove(request.itemId._id, request.buyerId._id)} className="approveBtn">Approve</button>
+            <button onClick={() => handleDecline(request.itemId._id, request.buyerId._id)} className="declineBtn">Decline</button>
+          </div>
+             
               
               </div>
               

@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { getTraderApprovalRequests } from './Trader';
 // Add action to create a new item
 export const createItem = (caption, price, image) => async (dispatch) => {
   try {
@@ -46,6 +46,8 @@ export const approveSale = (itemId, buyerId) => async (dispatch) => {
       type: 'ApproveSaleSuccess',
       payload: { itemId, buyerId, message: data.message },
     });
+    // Refresh the trader's approval requests
+    dispatch(getTraderApprovalRequests());
   } catch (error) {
     dispatch({
       type: 'ApproveSaleFailure',
@@ -65,6 +67,8 @@ export const declineSale = (itemId, buyerId) => async (dispatch) => {
       type: 'DeclineSaleSuccess',
       payload: { itemId, buyerId, message: data.message },
     });
+    // Refresh the trader's approval requests
+    dispatch(getTraderApprovalRequests());
   } catch (error) {
     dispatch({
       type: 'DeclineSaleFailure',
@@ -90,19 +94,5 @@ export const getMyItems = () => async (dispatch) => {
     dispatch({ type: 'GET_MY_ITEMS_SUCCESS', payload: data.items });
   } catch (error) {
     dispatch({ type: 'GET_MY_ITEMS_FAILURE', payload: error.message });
-  }
-};
-
-// Action to fetch approval requests
-export const getApprovalRequests = () => async (dispatch) => {
-  try {
-    dispatch({ type: 'GET_APPROVAL_REQUESTS_REQUEST' });
-    const { data } = await axios.get('/api/marketplace/approvalRequests'); // Update with your API endpoint
-    dispatch({ type: 'GET_APPROVAL_REQUESTS_SUCCESS', payload: data.items });
-  } catch (error) {
-    dispatch({
-      type: 'GET_APPROVAL_REQUESTS_FAILURE',
-      payload: error.response.data.message,
-    });
   }
 };

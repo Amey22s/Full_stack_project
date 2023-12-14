@@ -41,9 +41,7 @@ export const itemReducer = createReducer(initialState, (builder) => {
     })
 
     // Handling clear actions
-    .addCase('clearItemErrors', (state) => {
-      state.error = null;
-    })
+
     .addCase('clearItemMessages', (state) => {
       state.message = null;
     })
@@ -114,6 +112,9 @@ export const itemReducer = createReducer(initialState, (builder) => {
     .addCase('DeclineSaleFailure', (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    })
+    .addCase('clearItemErrors', (state) => {
+      state.error = null;
     });
 });
 

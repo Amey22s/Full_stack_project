@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Typography } from '@mui/material';
 import { useAlert } from 'react-alert';
+import { useNavigate } from 'react-router-dom';
+
 import './NewItem.css'; // Similar to NewPost.css
 import { createItem } from '../../Actions/Item'; // Replace with your action to create an item
 
@@ -13,7 +15,7 @@ const NewItem = () => {
   const { loading, error, message } = useSelector((state) => state.item); // Replace with your relevant state
   const dispatch = useDispatch();
   const alert = useAlert();
-
+const navigate=useNavigate();
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     const Reader = new FileReader();
@@ -29,6 +31,8 @@ const NewItem = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createItem(caption, price, image));
+    navigate("/marketplace"); 
+
   };
 
   useEffect(() => {

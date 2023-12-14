@@ -57,7 +57,7 @@ export const traderReducer = createReducer(initialState, (builder) => {
     .addCase('TraderRegisterSuccess', (state, action) => {
       state.loading = false;
       state.trader = action.payload;
-      state.isAuthenticated = true;
+      state.isAuthenticated = false;
     })
     .addCase('TraderRegisterFailure', (state, action) => {
       state.loading = false;

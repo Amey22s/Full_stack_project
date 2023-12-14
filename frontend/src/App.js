@@ -119,18 +119,7 @@ function App() {
 
         {!isAdmin && (
           <>
-            <Route
-              path="/"
-              element={
-                isAuthenticated ? (
-                  <Home />
-                ) : traderAuth ? (
-                  <Marketplace />
-                ) : (
-                  <Login />
-                )
-              }
-            />
+            <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
 
             <Route
               path="/account"

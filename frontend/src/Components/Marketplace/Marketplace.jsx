@@ -1,4 +1,5 @@
 import { Button } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItemsOnSale, getMyItems, markInterest, approveSale, declineSale } from '../../Actions/Item'; 
@@ -7,8 +8,11 @@ import './Marketplace.css';
 import { useAlert } from 'react-alert';
 
 const Marketplace = () => {
-  const [activeTab, setActiveTab] = useState('itemsOnSale');
-const [activeSubTab, setActiveSubTab] = useState('selling');
+  const location = useLocation();
+  const initialTab = location.state?.activeTab || 'itemsOnSale'; // Default to 'itemsOnSale' if no state is passed
+  const initialSubTab = location.state?.activeSubTab || 'selling'; // Default to 'selling' if no state is passed
+  const [activeTab, setActiveTab] = useState(initialTab);
+const [activeSubTab, setActiveSubTab] = useState(initialSubTab);
   const dispatch = useDispatch();
   const { itemsOnSale, myItems, message:itemMessage, loading:itemLoading, error:itemError } = useSelector(state => state.item);
   const traderProfile = useSelector(state => state.trader);

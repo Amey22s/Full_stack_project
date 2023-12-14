@@ -31,7 +31,7 @@ const navigate=useNavigate();
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(createItem(caption, price, image));
-    navigate("/marketplace"); 
+    navigate("/marketplace", { state: { activeTab: "myItems", activeSubTab: "selling" } }); 
 
   };
 

@@ -48,7 +48,7 @@ const TraderProfile = () => {
         <>
          
           {trader && trader.avatar && (
-  <div className="traderProfileHeader">
+  <div className="accountright">
     <Avatar
       src={trader.avatar.url}
       sx={{ height: "8vmax", width: "8vmax" }}
@@ -57,7 +57,7 @@ const TraderProfile = () => {
   </div>
 )}
 
-          <div className="traderProfileDetails">
+          <div className="accountright">
             <div>
               <Typography variant="h6">Items Posted</Typography>
               <Typography>{trader.itemsPosted.length}</Typography>

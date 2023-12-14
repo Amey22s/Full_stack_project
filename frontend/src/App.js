@@ -93,7 +93,7 @@ function App() {
   } else if (traderAuth && isTrader) {
     headerComponent = <TraderHeader />;
   }
-
+  console.log('console');
   return (
     <Router>
       {headerComponent}

@@ -1,10 +1,15 @@
 import { createReducer } from '@reduxjs/toolkit';
+// const guest = {"Name": "Guest"};
 const initialState = {
-  // loading: false,
-  // user: {},
-  // //isAuthenticated: false,
-  // isAdmin: false,
-  // isGuest: false,
+  loading: false,
+  user: null,
+  isAuthenticated: false,
+  isAdmin: false,
+  isTrader: false,
+  isGuest: false,
+  adminAuth: false,
+  traderAuth: false,
+  error: null
 };
 
 export const userReducer = createReducer(initialState, (builder) => {
@@ -42,6 +47,12 @@ export const userReducer = createReducer(initialState, (builder) => {
     state.user = action.payload;
     state.isAuthenticated = true;
   });
+  builder.addCase('LoadGuestSuccess', (state, action) => {
+    state.loading = false;
+    state.user = action.payload;
+    state.isGuest = true;
+  });
+  
   builder.addCase('LoadUserFailure', (state, action) => {
     state.loading = false;
     state.error = action.payload;
@@ -66,9 +77,8 @@ export const userReducer = createReducer(initialState, (builder) => {
     state.error = null;
   });
   builder.addCase('GUEST_LOGIN', (state) => {
-    state.isAuthenticated = true;
     state.isGuest = true;
-    state.user = { name: 'Guest User' };
+    state.user = { "name": "guest" };
   });
 });
 

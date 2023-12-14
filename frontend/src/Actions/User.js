@@ -36,10 +36,24 @@ export const loadUser = () => async (dispatch) => {
 
     const { data } = await axios.get('/api/v1/me');
 
+    console.log("Data in loadUser is ",data);
+
+    if(data.user.name === "guest")
+    {
+      console.log("In if of loadUser")
+      dispatch({
+        type: 'LoadGuestSuccess',
+        payload: data.user,
+      });
+    }
+    else{
+
+      console.log("In else of loadUser")
     dispatch({
       type: 'LoadUserSuccess',
       payload: data.user,
     });
+  }
   } catch (error) {
     dispatch({
       type: 'LoadUserFailure',

@@ -4,6 +4,11 @@ const initialState = {
   loading: false,
   trader: null,
   isAuthenticated: false,
+  isAdmin: false,
+  isTrader: false,
+  isGuest: false,
+  adminAuth: false,
+  traderAuth: false,
   error: null,
   approvalRequests: [],
 };
@@ -18,6 +23,7 @@ export const traderReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.trader = action.payload; // This should include itemsBought and other details
       state.isAuthenticated = true; // Assuming successful load implies authentication
+      state.isGuest = false;
     })
     .addCase('LoadTraderFailure', (state, action) => {
       state.loading = false;
@@ -31,6 +37,7 @@ export const traderReducer = createReducer(initialState, (builder) => {
       state.trader = action.payload;
       state.isAuthenticated = true;
       state.isTrader = true;
+      state.isGuest = false;
     })
     .addCase('TraderLoginFailure', (state, action) => {
       state.loading = false;

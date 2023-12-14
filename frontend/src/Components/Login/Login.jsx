@@ -39,10 +39,12 @@ const navigate = useNavigate();
     e.preventDefault();
 
     dispatch(adminLogin(email, password));
+    navigate('/');
   };
   
   const handleGuestLogin = () => {
     dispatch(guestLogin());
+    navigate('/');
   };
 
 

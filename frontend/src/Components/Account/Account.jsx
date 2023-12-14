@@ -2,7 +2,7 @@ import { Avatar, Button, Dialog, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteMyProfile, getMyPosts, logoutUser } from "../../Actions/User";
 import Loader from "../Loader/Loader";
 import Post from "../Post/Post";
@@ -11,6 +11,7 @@ import "./Account.css";
 
 const Account = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const alert = useAlert();
 
   const { user, loading: userLoading } = useSelector((state) => state.user);
@@ -26,6 +27,7 @@ const Account = () => {
   const [followingToggle, setFollowingToggle] = useState(false);
   const logoutHandler = () => {
     dispatch(logoutUser());
+    navigate('/');
     alert.success("Logged out successfully");
   };
 
@@ -80,6 +82,8 @@ const Account = () => {
         )}
       </div>
       <div className="accountright">
+        {user !== null ?
+        <>
         <Avatar
           src={user.avatar.url}
           sx={{ height: "8vmax", width: "8vmax" }}
@@ -121,6 +125,12 @@ const Account = () => {
         >
           Delete My Profile
         </Button>
+        </>
+        : 
+        (<>
+        <Typography>Please Login first to see your user details.</Typography>
+        </>)
+        }
 
         <Dialog
           open={followersToggle}

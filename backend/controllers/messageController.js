@@ -11,6 +11,14 @@ exports.sendMessage = async (req, res) => {
     const sender = await User.findById(req.body.sender.sender);
     const receiver = await User.findById(req.body.sender.receiver);
 
+    if(receiver === null)
+    {
+      res.status(500).json({
+        success: false,
+        message: "Please first select a converation on right.",
+      });
+    }
+
 
     console.log("Message receiver is ",JSON.stringify(receiver))
     console.log("Message sender is ",JSON.stringify(sender))
@@ -115,11 +123,6 @@ exports.getMyConversations = async (req, res) => {
             console.log("Here")
               messages.push(message);
         }
-        // if(message.receiver === rUserId || message.sender === rUserId)
-        // {
-
-        //     messages.push(message);
-        // }
       }
 
       console.log("Messages in getMyMessages bakend is ",messages);

@@ -32,15 +32,32 @@ exports.isAuthenticated = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     console.log("Token is ",token);
+    console.log("req.user is ",req.user);
     if (typeof token === 'undefined') {
-      res.status(401).json({
-      success: false,
-      message: 'Please login!',
-      });
+      if(typeof req.user === 'undefined' || req.user.name === "guest")
+      {
+        req.user = {"name":"guest"};
+        next();
+      }
+      else {
+        res.status(401).json({
+        success: false,
+        message: 'Please login!',
+        });
+      }
       // req.isGuest = true;
       // next();
     }
+    else if(token === "Guest User")
+    {
+      console.log("In guest user auth")
+      req.user = {"name":"guest"};
+      next();
+      console.log("Here in auth");
+    }
+    else {
 
+    console.log("Outside in auth");
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
     // Attempt to find user first
@@ -79,6 +96,7 @@ exports.isAuthenticated = async (req, res, next) => {
     // res.cookie('token', token, cookieOptions);
     
     next();
+  }
   } catch (error) {
     res.status(500).json({
       success: false,

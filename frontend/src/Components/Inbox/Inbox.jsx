@@ -8,12 +8,12 @@ import { getAllMessages, getMyConversations } from "../../Actions/Message";
 import { getUserProfile } from "../../Actions/User";
 import Loader from "../Loader/Loader";
 import NewChat from '../NewChat/NewChat';
-import { Avatar, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useAlert } from "react-alert";
 
 function Inbox() {
   const [receiver, setReceiver] = useState("");
-  const [selectedConv, setSelectedConv] = useState([]);
+  // const [selectedConv, setSelectedConv] = useState([]);
 
   // const sender = {};
   // var receiver = "";
@@ -36,16 +36,16 @@ function Inbox() {
 
   useEffect(() => {
     // Fetch conversations from backend API
-    console.log("User is ",me)
+    // console.log("User is ",me)
     dispatch(getMyConversations())
-    setSelectedConv(selectedConversation);
+    dispatch(getAllMessages(params.id));
   },[dispatch]);
 
   useEffect(() => {
     dispatch(getAllMessages(params.id));
     dispatch(getUserProfile(params.id));
     setReceiver(params.id)
-    setSelectedConv(selectedConversation);
+    // setSelectedConv(selectedConversation);
     console.log("Receiver in Inbox is ",user);
     console.log("SelecteConversation in Inbox is ",selectedConversation);
     console.log("Conversations in Inbox is ",conversations)
@@ -77,7 +77,7 @@ function Inbox() {
         <div>
           <h2>{user === undefined ? 'Start a new conversation' : `Conversation with ${user.name}`}</h2>
           <ul>
-            {selectedConversation && (selectedConversation.map(message => (
+            {selectedConversation && user !== undefined && (selectedConversation.map(message => (
               <li key={message._id}>
               {(message.sender === user._id ? user.name : me.name)+": "+message.text}
               </li>

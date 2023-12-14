@@ -73,8 +73,8 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.matchPassword = async function (password) {
-  console.log('inside match passsword user password received is', password);
-  console.log('this password is ', this.password);
+  // console.log('inside match passsword user password received is', password);
+  // console.log('this password is ', this.password);
   console.log(bcrypt.compare(password, this.password));
   return await bcrypt.compare(password, this.password);
 };

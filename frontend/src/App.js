@@ -16,7 +16,6 @@ import ResetPassword from './Components/ResetPassword/ResetPassword';
 import UserProfile from './Components/UserProfile/UserProfile';
 import Search from './Components/Search/Search';
 import NotFound from './Components/NotFound/NotFound';
-import { jwtDecode } from 'jwt-decode'; // For decoding token (optional)
 
 import RegisterTrader from './Components/TraderRegister/TraderRegister';
 import Marketplace from './Components/Marketplace/Marketplace';

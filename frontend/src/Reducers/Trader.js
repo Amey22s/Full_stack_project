@@ -5,6 +5,7 @@ const initialState = {
   trader: null,
   isAuthenticated: false,
   error: null,
+  approvalRequests: [],
 };
 
 export const traderReducer = createReducer(initialState, (builder) => {
@@ -75,6 +76,17 @@ export const traderReducer = createReducer(initialState, (builder) => {
       state.loading = false;
       state.error = action.payload;
       state.isAuthenticated = false;
+    })
+    .addCase('TraderApprovalRequestsRequest', (state) => {
+      state.loading = true;
+    })
+    .addCase('TraderApprovalRequestsSuccess', (state, action) => {
+      state.loading = false;
+      state.approvalRequests = action.payload;
+    })
+    .addCase('TraderApprovalRequestsFailure', (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     })
     .addCase('clearErrors', (state) => {
       state.error = null;

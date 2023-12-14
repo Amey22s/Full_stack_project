@@ -39,18 +39,7 @@ export const itemReducer = createReducer(initialState, (builder) => {
     .addCase('GET_MY_ITEMS_FAILURE', (state, action) => {
       state.error = action.payload;
     })
-    // Handling fetching approval requests
-    .addCase('GET_APPROVAL_REQUESTS_REQUEST', (state, action) => {
-      state.loading = true;
-    })
-    .addCase('GET_APPROVAL_REQUESTS_SUCCESS', (state, action) => {
-      state.loading = false;
-      state.approvalRequests = action.payload;
-    })
-    .addCase('GET_APPROVAL_REQUESTS_FAILURE', (state, action) => {
-      state.error = action.payload;
-      state.error = action.payload;
-    })
+
     // Handling clear actions
     .addCase('clearItemErrors', (state) => {
       state.error = null;
@@ -85,14 +74,15 @@ export const itemReducer = createReducer(initialState, (builder) => {
     .addCase('ApproveSaleSuccess', (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
+      console.log('inside item reducer payload', action.payload);
       // Update item status to 'sold' and set soldTo
-      state.approvalRequests = state.approvalRequests.filter(
-        (request) => request._id !== action.payload.requestId
-      );
       state.myItems = state.myItems.map((item) =>
         item._id === action.payload.itemId
           ? { ...item, status: 'sold', soldTo: action.payload.buyerId }
           : item
+      );
+      state.approvalRequests = state.approvalRequests.filter(
+        (request) => request._id !== action.payload.itemId
       );
     })
     .addCase('ApproveSaleFailure', (state, action) => {
@@ -107,10 +97,6 @@ export const itemReducer = createReducer(initialState, (builder) => {
     .addCase('DeclineSaleSuccess', (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
-      state.approvalRequests = state.approvalRequests.filter(
-        (request) => request._id !== action.payload.requestId
-      );
-      // Remove buyerId from interestedBuyers array
       state.myItems = state.myItems.map((item) =>
         item._id === action.payload.itemId
           ? {
@@ -120,6 +106,9 @@ export const itemReducer = createReducer(initialState, (builder) => {
               ),
             }
           : item
+      );
+      state.approvalRequests = state.approvalRequests.filter(
+        (request) => request._id !== action.payload.itemId
       );
     })
     .addCase('DeclineSaleFailure', (state, action) => {

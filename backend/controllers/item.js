@@ -40,6 +40,7 @@ exports.createItem = async (req, res) => {
 exports.markInterest = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id);
+    const buyerId = req.trader._id;
     console.log(item, 'item');
     console.log(req, 'request');
     console.log(req.trader, 'request.trader');
@@ -67,6 +68,12 @@ exports.markInterest = async (req, res) => {
     console.log('interestedBuyers updated');
 
     await item.save();
+    // Find the owner of the item and add the item to their approvalRequests
+    const owner = await Trader.findById(item.owner);
+    if (!owner.approvalRequests.includes(item._id)) {
+      owner.approvalRequests.push({ itemId: item._id, buyerId: buyerId });
+      await owner.save();
+    }
     console.log('save and before update iteminterested');
     // Also update the trader's itemsInterested if the trader exists
     if (trader && !trader.itemsInterested.includes(item._id)) {
@@ -106,6 +113,12 @@ exports.sellItem = async (req, res) => {
         message: 'Unauthorized',
       });
     }
+    if (item.status === 'sold') {
+      return res.status(400).json({
+        success: false,
+        message: 'Already Sold',
+      });
+    }
 
     if (!item.interestedBuyers.includes(buyerId)) {
       return res.status(400).json({
@@ -121,11 +134,17 @@ exports.sellItem = async (req, res) => {
     // Update seller (owner)
     const seller = await Trader.findById(req.trader._id);
     seller.itemsSold.push(id);
+    seller.approvalRequests = seller.approvalRequests.filter(
+      (request) =>
+        request.itemId.toString() !== id &&
+        request.buyerId.toString() !== buyerId
+    );
     await seller.save();
 
     // Update buyer
     const buyer = await Trader.findById(buyerId);
     buyer.itemsBought.push(id);
+
     await buyer.save();
     res.status(200).json({
       success: true,
@@ -159,6 +178,14 @@ exports.declineSale = async (req, res) => {
     );
 
     await item.save();
+    // Remove the item from seller's approvalRequests
+    const seller = await Trader.findById(item.owner);
+    seller.approvalRequests = seller.approvalRequests.filter(
+      (request) =>
+        request.itemId.toString() !== id &&
+        request.buyerId.toString() !== buyerId
+    );
+    await seller.save();
 
     res.status(200).json({ message: 'Interest declined successfully' });
   } catch (error) {
@@ -189,19 +216,6 @@ exports.getMyItems = async (req, res) => {
       .sort({
         createdAt: -1,
       });
-    res.json({ success: true, items });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-// Get all approval requests for the current user's items
-exports.getApprovalRequests = async (req, res) => {
-  try {
-    const items = await Item.find({
-      owner: req.trader._id,
-      'interestedBuyers.0': { $exists: true },
-    }).populate('interestedBuyers', 'name email');
     res.json({ success: true, items });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

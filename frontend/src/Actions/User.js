@@ -436,3 +436,22 @@ export const fetchSearchResults = (searchTerm) => async(dispatch) => {
     });
   }
 };
+
+export const getAllPosts = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: 'allPostsRequest',
+    });
+
+    const { data } = await axios.get('/api/v1/allPosts');
+    dispatch({
+      type: 'allPostsSuccess',
+      payload: data.posts,
+    });
+  } catch (error) {
+    dispatch({
+      type: 'allPostsFailure',
+      payload: error.response.data.message,
+    });
+  }
+};

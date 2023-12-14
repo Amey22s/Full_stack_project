@@ -31,12 +31,14 @@ const Trader = require('../models/Trader');
 exports.isAuthenticated = async (req, res, next) => {
   try {
     const { token } = req.cookies;
-    // console.log("Token is ",token);
+    console.log("Token is ",token);
     if (typeof token === 'undefined') {
       res.status(401).json({
-        success: false,
-        message: 'Please login!',
+      success: false,
+      message: 'Please login!',
       });
+      // req.isGuest = true;
+      // next();
     }
 
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
@@ -67,6 +69,15 @@ exports.isAuthenticated = async (req, res, next) => {
       });
     }
 
+    //res.locals.token = token;
+
+    // const cookieOptions = {
+    //   httpOnly: true, // For better security
+    //   maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
+    // };
+    
+    // res.cookie('token', token, cookieOptions);
+    
     next();
   } catch (error) {
     res.status(500).json({

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AdminHeader.css";
+import "./GuestHeader.css";
 import { Link } from "react-router-dom";
 import {
   Home,
@@ -10,7 +10,7 @@ import {
   PeopleOutlined,
 } from "@mui/icons-material";
 
-const AdminHeader = () => {
+const GuestHeader = () => {
   const [tab, setTab] = useState(window.location.pathname);
   return (
     <div className="header">
@@ -23,7 +23,7 @@ const AdminHeader = () => {
       </Link>
 
 
-      <Link to="/allUsers" onClick={() => setTab("/allUsers")}>
+      {/* <Link to="/allUsers" onClick={() => setTab("/allUsers")}>
          {tab === "/allUsers" ? (
            <People style={{ color: "black" }} />
          ) : (
@@ -38,10 +38,10 @@ const AdminHeader = () => {
         ) : (
           <AccountCircleOutlined />
         )}
-      </Link>
+      </Link> */}
        
     </div>
   );
 };
 
-export default AdminHeader;
+export default GuestHeader;

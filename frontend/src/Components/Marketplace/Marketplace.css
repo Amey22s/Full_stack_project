@@ -1,0 +1,168 @@
+.marketplace .tabs {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f1f1f1;
+    padding: 10px;
+  }
+  
+  .marketplace .tabs button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .marketplace .tabs button:hover {
+    background-color: #ddd;
+  }
+  
+  .marketplace .itemsList {
+    margin-top: 20px;
+  }
+  .itemsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .itemCard {
+    width: 300px; /* Width of the card */
+    height: 300px; /* Height equal to width for 1:1 aspect ratio */
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+  
+  .itemImage {
+    flex-grow: 1; /* Image section takes up remaining space */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Ensures no spillover */
+  }
+  
+  .itemImage img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  .itemDetails {
+    padding: 10px;
+    text-align: center;
+    background-color: #f9f9f9; /* Light background for visibility */
+  }
+  
+  .itemDetails h3, .itemDetails p {
+    margin: 5px 0;
+  }
+  
+  .itemDetails button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .itemDetails button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media screen and (max-width: 600px) {
+    .itemsList {
+      justify-content: space-around;
+    }
+  
+    .itemCard {
+      width: 80%;
+      height: auto; /* Auto-adjust height on smaller screens */
+    }
+  }
+  
+  .approvalList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .approvalCard {
+    width: 250px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .approvalDetails {
+    text-align: center;
+  }
+  
+  .itemTitle {
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .buyerCount {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .buyerInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .buyerName {
+    font-weight: bold;
+  }
+  
+  .approveBtn, .declineBtn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .approveBtn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .approveBtn:hover {
+    background-color: #218838;
+  }
+  
+  .declineBtn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .declineBtn:hover {
+    background-color: #c82333;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .approvalList {
+      justify-content: space-around;
+    }
+  
+    .approvalCard {
+      width: 90%;
+    }
+  }
+  
